@@ -1,27 +1,34 @@
 import {FilterTasks, TaskType} from "../App.tsx";
 import {Button} from "./Button.tsx";
 import {Task} from "./Task.tsx";
+import {useState} from "react";
 
 type Props = {
   title: string
   tasks: TaskType[]
-  filter: FilterTasks
   deleteTask: (taskId: number) => void
-  changeFilter: (filter: FilterTasks) => void
 }
 
-export const Todolist = ({tasks, title, deleteTask, filter, changeFilter}: Props) => {
+export const Todolist = ({tasks, title, deleteTask}: Props) => {
 
+  const [filter, setFilter] = useState<FilterTasks>("all")
 
-  let filteredTasks = tasks
-  if (filter === "active") {
-    filteredTasks = tasks.filter((task) => !task.isDone)
+  const getFilteredTasks = () => {
+    switch (filter) {
+      case "active": {
+        return tasks.filter((task) => !task.isDone)
+      }
+      case "completed": {
+        return tasks.filter((task) => task.isDone)
+      }
+      default: {
+        return tasks
+      }
+    }
   }
-  if (filter === "completed") {
-    filteredTasks = tasks.filter((task) => task.isDone)
-  }
 
-  const mappedTasks = filteredTasks.map(t => {
+
+  const mappedArrTasks = getFilteredTasks().map(t => {
     return (
       <Task key={t.id} task={t} deleteTask={deleteTask}/>
     )
@@ -35,16 +42,16 @@ export const Todolist = ({tasks, title, deleteTask, filter, changeFilter}: Props
         <button>+</button>
       </div>
       {
-        filteredTasks.length === 0
+        mappedArrTasks.length === 0
           ? <p>Тасок нет</p>
           : <ul>
-            {mappedTasks}
+            {mappedArrTasks}
           </ul>
       }
       <div>
-        <Button title={"all"} onClick={() => changeFilter("all")}/>
-        <Button title={"active"} onClick={() => changeFilter("active")}/>
-        <Button title={"completed"} onClick={() => changeFilter("completed")}/>
+        <Button title={"all"} onClick={() => setFilter("all")}/>
+        <Button title={"active"} onClick={() => setFilter("active")}/>
+        <Button title={"completed"} onClick={() => setFilter("completed")}/>
       </div>
     </div>
   );

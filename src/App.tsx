@@ -17,27 +17,18 @@ export const App = () => {
     {id: 3, title: "ReactJS", isDone: true},
     {id: 4, title: "Redux", isDone: true},
     {id: 5, title: "TypeScript", isDone: false},
-    {id: 6, title: "RTK query", isDone: false},
+    {id: 6, title: "RTK query", isDone: true},
   ])
-
-  const [filter, setFilter] = useState<FilterTasks>("all")
 
   const deleteTask = (taskId: number) => {
     setTasks(tasks.filter(t => t.id !== taskId))
   }
 
-  const changeFilter = (filter: FilterTasks) => {
-    setFilter(filter)
-  }
-
-
   return (
     <div className="app">
       <Todolist title={"task-1"}
                 tasks={tasks}
-                filter={filter}
                 deleteTask={deleteTask}
-                changeFilter={changeFilter}
       />
     </div>
   )
