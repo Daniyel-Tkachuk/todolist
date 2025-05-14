@@ -1,10 +1,16 @@
 type Props = {
   title: string
+  onClick: () => void
 }
 
-export const Button = ({title}: Props) => {
+
+export const Button = ({title, onClick}: Props) => {
+  const onClickHandler = () => {
+    onClick()
+  }
+
   return (
-    <button>
+    <button onClick={onClickHandler}>
       {title}
     </button>
   );
