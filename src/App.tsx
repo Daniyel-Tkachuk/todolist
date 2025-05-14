@@ -1,6 +1,6 @@
 import './App.css'
 import {Todolist} from "./components/Todolist.tsx";
-import {useReducer, useState} from "react";
+import {useState} from "react";
 
 export type TaskType = {
   id: number
