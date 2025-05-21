@@ -1,4 +1,5 @@
 import {TaskType} from "../App.tsx";
+import {Button} from "./Button.tsx";
 
 type Props = {
   task: TaskType
@@ -15,7 +16,7 @@ export const Task = ({task, deleteTask}: Props) => {
     <li>
       <input type="checkbox" checked={task.isDone}/>
       <span>{task.title}</span>
-      <button onClick={deleteTaskHandler}>x</button>
+      <Button title="x" onClick={deleteTaskHandler}/>
     </li>
   );
 };
