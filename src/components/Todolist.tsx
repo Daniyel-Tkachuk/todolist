@@ -1,17 +1,34 @@
 import {FilterTasks, TaskType} from "../App.tsx";
 import {Button} from "./Button.tsx";
 import {Task} from "./Task.tsx";
-import {useState} from "react";
+import {ChangeEvent, useState, KeyboardEvent} from "react";
 
 type Props = {
   title: string
   tasks: TaskType[]
   deleteTask: (taskId: string) => void
   deleteAllTasks: () => void
+  addTask: (taskTitle: string) => void
 }
 
-export const Todolist = ({tasks, title, deleteTask, deleteAllTasks}: Props) => {
+export const Todolist = ({tasks, title, deleteTask, deleteAllTasks, addTask}: Props) => {
   const [filter, setFilter] = useState<FilterTasks>("all")
+  const [taskTitle, setTaskTitle] = useState("");
+
+  const setTaskTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setTaskTitle(e.currentTarget.value)
+  }
+
+  const onEnterHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      addTaskHandler()
+    }
+  }
+
+  const addTaskHandler = () => {
+    addTask(taskTitle)
+    setTaskTitle("")
+  }
 
   const getFilteredTasks = () => {
     switch (filter) {
@@ -37,8 +54,8 @@ export const Todolist = ({tasks, title, deleteTask, deleteAllTasks}: Props) => {
     <div>
       <h3>{title}</h3>
       <div>
-        <input/>
-        <button>+</button>
+        <input type="text" value={taskTitle} onChange={setTaskTitleHandler} onKeyDown={onEnterHandler}/>
+        <Button title="+" onClick={addTaskHandler}/>
       </div>
       {
         mappedArrTasks.length === 0
