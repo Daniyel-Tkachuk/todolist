@@ -6,11 +6,11 @@ import {useState} from "react";
 type Props = {
   title: string
   tasks: TaskType[]
-  deleteTask: (taskId: number) => void
+  deleteTask: (taskId: string) => void
+  deleteAllTasks: () => void
 }
 
-export const Todolist = ({tasks, title, deleteTask}: Props) => {
-
+export const Todolist = ({tasks, title, deleteTask, deleteAllTasks}: Props) => {
   const [filter, setFilter] = useState<FilterTasks>("all")
 
   const getFilteredTasks = () => {
@@ -26,7 +26,6 @@ export const Todolist = ({tasks, title, deleteTask}: Props) => {
       }
     }
   }
-
 
   const mappedArrTasks = getFilteredTasks().map(t => {
     return (
@@ -49,9 +48,14 @@ export const Todolist = ({tasks, title, deleteTask}: Props) => {
           </ul>
       }
       <div>
-        <Button title={"all"} onClick={() => setFilter("all")}/>
-        <Button title={"active"} onClick={() => setFilter("active")}/>
-        <Button title={"completed"} onClick={() => setFilter("completed")}/>
+        <div>
+          <Button title={"all"} onClick={() => setFilter("all")}/>
+          <Button title={"active"} onClick={() => setFilter("active")}/>
+          <Button title={"completed"} onClick={() => setFilter("completed")}/>
+        </div>
+        <div>
+          <Button title={"Delete all tasks"} onClick={deleteAllTasks}/>
+        </div>
       </div>
     </div>
   );

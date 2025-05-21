@@ -2,7 +2,7 @@ import {TaskType} from "../App.tsx";
 
 type Props = {
   task: TaskType
-  deleteTask: (taskId: number) => void
+  deleteTask: (taskId: string) => void
 }
 
 export const Task = ({task, deleteTask}: Props) => {
