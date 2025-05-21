@@ -27,12 +27,22 @@ export const App = () => {
     setTasks([])
   }
 
+  const createTask = (id: string, taskTitle: string, isDone: boolean = false): TaskType => {
+    return {id, title: taskTitle, isDone}
+  }
+
+  const addTask = (taskTitle: string) => {
+    const newTask = createTask(crypto.randomUUID(), taskTitle);
+    setTasks([newTask, ...tasks])
+  }
+
   return (
     <div className="app">
       <Todolist title={"task-1"}
                 tasks={tasks}
                 deleteTask={deleteTask}
                 deleteAllTasks={deleteAllTasks}
+                addTask={addTask}
       />
     </div>
   )
