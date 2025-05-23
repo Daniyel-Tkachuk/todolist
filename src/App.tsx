@@ -20,17 +20,19 @@ export const App = () => {
     {id: crypto.randomUUID(), title: "RTK query", isDone: true},
   ])
 
+
   const deleteTask = (taskId: string) => {
     setTasks(tasks.filter(t => t.id !== taskId))
   }
   const deleteAllTasks = () => {
     setTasks([])
   }
-
+  const changeTaskStatus = (taskId: string, isDone: boolean) => {
+    setTasks(tasks.map(t => t.id === taskId ? {...t, isDone} : t))
+  }
   const createTask = (id: string, taskTitle: string, isDone: boolean = false): TaskType => {
     return {id, title: taskTitle, isDone}
   }
-
   const addTask = (taskTitle: string) => {
     const newTask = createTask(crypto.randomUUID(), taskTitle);
     setTasks([newTask, ...tasks])
@@ -43,6 +45,7 @@ export const App = () => {
                 deleteTask={deleteTask}
                 deleteAllTasks={deleteAllTasks}
                 addTask={addTask}
+                changeTaskStatus={changeTaskStatus}
       />
     </div>
   )

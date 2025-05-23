@@ -9,22 +9,21 @@ type Props = {
   deleteTask: (taskId: string) => void
   deleteAllTasks: () => void
   addTask: (taskTitle: string) => void
+  changeTaskStatus: (taskId: string, isDone: boolean) => void
 }
 
-export const Todolist = ({tasks, title, deleteTask, deleteAllTasks, addTask}: Props) => {
+export const Todolist = ({tasks, title, deleteTask, deleteAllTasks, addTask, changeTaskStatus}: Props) => {
   const [filter, setFilter] = useState<FilterTasks>("all")
   const [taskTitle, setTaskTitle] = useState("");
 
   const setTaskTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setTaskTitle(e.currentTarget.value)
   }
-
   const onEnterHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       addTaskHandler()
     }
   }
-
   const addTaskHandler = () => {
     addTask(taskTitle)
     setTaskTitle("")
@@ -46,7 +45,7 @@ export const Todolist = ({tasks, title, deleteTask, deleteAllTasks, addTask}: Pr
 
   const mappedArrTasks = getFilteredTasks().map(t => {
     return (
-      <Task key={t.id} task={t} deleteTask={deleteTask}/>
+      <Task key={t.id} task={t} deleteTask={deleteTask} changeTaskStatus={changeTaskStatus}/>
     )
   })
 
