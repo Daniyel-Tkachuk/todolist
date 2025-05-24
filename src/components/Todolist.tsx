@@ -14,10 +14,12 @@ type Props = {
 
 export const Todolist = ({tasks, title, deleteTask, deleteAllTasks, addTask, changeTaskStatus}: Props) => {
   const [filter, setFilter] = useState<FilterTasks>("all")
-  const [taskTitle, setTaskTitle] = useState("");
+  const [taskTitle, setTaskTitle] = useState("")
+  const [error, setError] = useState<string | null>(null)
 
   const setTaskTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setTaskTitle(e.currentTarget.value)
+    setError(null)
   }
   const onEnterHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -25,8 +27,13 @@ export const Todolist = ({tasks, title, deleteTask, deleteAllTasks, addTask, cha
     }
   }
   const addTaskHandler = () => {
-    addTask(taskTitle)
-    setTaskTitle("")
+    const trimmedTitle = taskTitle.trim()
+    if (trimmedTitle !== "") {
+      addTask(trimmedTitle)
+      setTaskTitle("")
+    } else {
+      setError("Title is required!")
+    }
   }
 
   const getFilteredTasks = () => {
@@ -53,8 +60,13 @@ export const Todolist = ({tasks, title, deleteTask, deleteAllTasks, addTask, cha
     <div>
       <h3>{title}</h3>
       <div>
-        <input type="text" value={taskTitle} onChange={setTaskTitleHandler} onKeyDown={onEnterHandler}/>
+        <input type="text"
+               className={error ? "error" : ""}
+               value={taskTitle}
+               onChange={setTaskTitleHandler}
+               onKeyDown={onEnterHandler}/>
         <Button title="+" onClick={addTaskHandler}/>
+        {error && <div className="error-message">{error}</div>}
       </div>
       {
         mappedArrTasks.length === 0
@@ -65,9 +77,9 @@ export const Todolist = ({tasks, title, deleteTask, deleteAllTasks, addTask, cha
       }
       <div>
         <div>
-          <Button title={"all"} onClick={() => setFilter("all")}/>
-          <Button title={"active"} onClick={() => setFilter("active")}/>
-          <Button title={"completed"} onClick={() => setFilter("completed")}/>
+          <Button className={filter === "all" ? "active-filter" : ""} title={"all"} onClick={() => setFilter("all")}/>
+          <Button className={filter === "active" ? "active-filter" : ""} title={"active"} onClick={() => setFilter("active")}/>
+          <Button className={filter === "completed" ? "active-filter" : ""} title={"completed"} onClick={() => setFilter("completed")}/>
         </div>
         <div>
           <Button title={"Delete all tasks"} onClick={deleteAllTasks}/>
