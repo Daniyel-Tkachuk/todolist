@@ -7,6 +7,7 @@ type Props = {
   todolist: TodolistType
   tasks: TasksStateType
   filter: FilterValues
+  removeTodolist: (todoId: string) => void
   deleteTask: (todoId: string, taskId: string) => void
   deleteAllTasks: (todoId: string) => void
   addTask: (todoId: string, taskTitle: string) => void
@@ -19,6 +20,7 @@ export const Todolist = (props: Props) => {
     tasks,
     todolist,
     filter,
+    removeTodolist,
     deleteTask,
     deleteAllTasks,
     addTask,
@@ -81,7 +83,8 @@ export const Todolist = (props: Props) => {
 
   return (
     <div>
-      <h3>{todolist.title}</h3>
+      <h3 style={{display: "inline-block", marginRight: "10px"}}>{todolist.title}</h3>
+      <Button title="X" onClick={() => removeTodolist(todolist.id)}/>
       <div>
         <input type="text"
                className={error ? "error" : ""}

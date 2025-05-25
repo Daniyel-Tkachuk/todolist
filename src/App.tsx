@@ -21,7 +21,6 @@ export type TodolistType = {
 export type FilterValues = "all" | "active" | "completed"
 
 
-
 export const App = () => {
   const todolistId_1 = crypto.randomUUID()
   const todolistId_2 = crypto.randomUUID()
@@ -43,6 +42,10 @@ export const App = () => {
     ],
   })
 
+  const removeTodolist = (todoId: string) => {
+    setTodolists(todolists.filter(tl => tl.id !== todoId))
+    deleteAllTasks(todoId)
+  }
 
   const deleteAllTasks = (todoId: string) => {
     const copyState = {...tasks}
@@ -76,6 +79,7 @@ export const App = () => {
                     todolist={el}
                     tasks={tasks}
                     filter={el.filter}
+                    removeTodolist={removeTodolist}
                     deleteTask={deleteTask}
                     deleteAllTasks={deleteAllTasks}
                     addTask={addTask}
