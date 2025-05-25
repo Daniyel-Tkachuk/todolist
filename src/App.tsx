@@ -8,6 +8,10 @@ export type TaskType = {
   isDone: boolean
 }
 
+export type TasksStateType = {
+  [key: string]: TaskType[]
+}
+
 export type TodolistType = {
   id: string
   title: string
@@ -16,20 +20,26 @@ export type TodolistType = {
 
 export type FilterValues = "all" | "active" | "completed"
 
+const todolistId_1 = crypto.randomUUID()
+const todolistId_2 = crypto.randomUUID()
+
 export const App = () => {
   const [todolists, setTodolists] = useState<TodolistType[]>([
-    {id: crypto.randomUUID(), title: 'What to learn', filter: 'all'},
-    {id: crypto.randomUUID(), title: 'What to buy', filter: 'all'},
+    {id: todolistId_1, title: 'What to learn', filter: 'all'},
+    {id: todolistId_2, title: 'What to buy', filter: 'all'},
   ])
 
-  const [tasks, setTasks] = useState<TaskType[]>([
-    {id: crypto.randomUUID(), title: "HTML&CSS", isDone: true},
-    {id: crypto.randomUUID(), title: "JS", isDone: false},
-    {id: crypto.randomUUID(), title: "ReactJS", isDone: true},
-    {id: crypto.randomUUID(), title: "Redux", isDone: true},
-    {id: crypto.randomUUID(), title: "TypeScript", isDone: false},
-    {id: crypto.randomUUID(), title: "RTK query", isDone: true},
-  ])
+  const [tasks, setTasks] = useState<TasksStateType>({
+    [todolistId_1]: [
+      { id: crypto.randomUUID(), title: 'HTML&CSS', isDone: true },
+      { id: crypto.randomUUID(), title: 'JS', isDone: true },
+      { id: crypto.randomUUID(), title: 'ReactJS', isDone: false },
+    ],
+    [todolistId_2]: [
+      { id: crypto.randomUUID(), title: 'Rest API', isDone: true },
+      { id: crypto.randomUUID(), title: 'GraphQL', isDone: false },
+    ],
+  })
 
 
   const deleteTask = (taskId: string) => {
