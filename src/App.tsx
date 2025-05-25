@@ -20,10 +20,12 @@ export type TodolistType = {
 
 export type FilterValues = "all" | "active" | "completed"
 
-const todolistId_1 = crypto.randomUUID()
-const todolistId_2 = crypto.randomUUID()
+
 
 export const App = () => {
+  const todolistId_1 = crypto.randomUUID()
+  const todolistId_2 = crypto.randomUUID()
+
   const [todolists, setTodolists] = useState<TodolistType[]>([
     {id: todolistId_1, title: 'What to learn', filter: 'all'},
     {id: todolistId_2, title: 'What to buy', filter: 'all'},
@@ -31,32 +33,35 @@ export const App = () => {
 
   const [tasks, setTasks] = useState<TasksStateType>({
     [todolistId_1]: [
-      { id: crypto.randomUUID(), title: 'HTML&CSS', isDone: true },
-      { id: crypto.randomUUID(), title: 'JS', isDone: true },
-      { id: crypto.randomUUID(), title: 'ReactJS', isDone: false },
+      {id: crypto.randomUUID(), title: 'HTML&CSS', isDone: true},
+      {id: crypto.randomUUID(), title: 'JS', isDone: true},
+      {id: crypto.randomUUID(), title: 'ReactJS', isDone: false},
     ],
     [todolistId_2]: [
-      { id: crypto.randomUUID(), title: 'Rest API', isDone: true },
-      { id: crypto.randomUUID(), title: 'GraphQL', isDone: false },
+      {id: crypto.randomUUID(), title: 'Rest API', isDone: true},
+      {id: crypto.randomUUID(), title: 'GraphQL', isDone: false},
     ],
   })
 
 
-  const deleteTask = (taskId: string) => {
-    setTasks(tasks.filter(t => t.id !== taskId))
+  const deleteAllTasks = (todoId: string) => {
+    const copyState = {...tasks}
+    delete copyState[todoId]
+    setTasks(copyState)
   }
-  const deleteAllTasks = () => {
-    setTasks([])
+
+  const deleteTask = (todoId: string, taskId: string) => {
+    setTasks({...tasks, [todoId]: tasks[todoId].filter(t => t.id !== taskId)})
   }
-  const changeTaskStatus = (taskId: string, isDone: boolean) => {
-    setTasks(tasks.map(t => t.id === taskId ? {...t, isDone} : t))
+  const changeTaskStatus = (todoId: string, taskId: string, isDone: boolean) => {
+    setTasks({...tasks, [todoId]: tasks[todoId].map(t => t.id === taskId ? {...t, isDone} : t)})
   }
   const createTask = (id: string, taskTitle: string, isDone: boolean = false): TaskType => {
     return {id, title: taskTitle, isDone}
   }
-  const addTask = (taskTitle: string) => {
+  const addTask = (todoId: string, taskTitle: string) => {
     const newTask = createTask(crypto.randomUUID(), taskTitle);
-    setTasks([newTask, ...tasks])
+    setTasks({...tasks, [todoId]: [newTask, ...tasks[todoId]]})
   }
   const changeFilter = (todoId: string, filter: FilterValues) => {
     setTodolists(todolists.map(tl => tl.id === todoId ? {...tl, filter} : tl))
