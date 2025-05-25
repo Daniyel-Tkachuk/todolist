@@ -1,19 +1,31 @@
-import {FilterTasks, TaskType} from "../App.tsx";
+import {FilterValues, TaskType, TodolistType} from "../App.tsx";
 import {Button} from "./Button.tsx";
 import {Task} from "./Task.tsx";
 import {ChangeEvent, useState, KeyboardEvent} from "react";
 
 type Props = {
-  title: string
+  todolist: TodolistType
   tasks: TaskType[]
+  filter: FilterValues
   deleteTask: (taskId: string) => void
   deleteAllTasks: () => void
   addTask: (taskTitle: string) => void
   changeTaskStatus: (taskId: string, isDone: boolean) => void
+  changeFilter: (todoId: string, filter: FilterValues) => void
 }
 
-export const Todolist = ({tasks, title, deleteTask, deleteAllTasks, addTask, changeTaskStatus}: Props) => {
-  const [filter, setFilter] = useState<FilterTasks>("all")
+export const Todolist = (props: Props) => {
+  const {
+    tasks,
+    todolist,
+    filter,
+    deleteTask,
+    deleteAllTasks,
+    addTask,
+    changeTaskStatus,
+    changeFilter
+  } = props
+
   const [taskTitle, setTaskTitle] = useState("")
   const [error, setError] = useState<string | null>(null)
 
@@ -34,6 +46,9 @@ export const Todolist = ({tasks, title, deleteTask, deleteAllTasks, addTask, cha
     } else {
       setError("Title is required!")
     }
+  }
+  const changeFilterHandler = (filter: FilterValues) => {
+    changeFilter(todolist.id, filter)
   }
 
   const getFilteredTasks = () => {
@@ -58,7 +73,7 @@ export const Todolist = ({tasks, title, deleteTask, deleteAllTasks, addTask, cha
 
   return (
     <div>
-      <h3>{title}</h3>
+      <h3>{todolist.title}</h3>
       <div>
         <input type="text"
                className={error ? "error" : ""}
@@ -77,9 +92,18 @@ export const Todolist = ({tasks, title, deleteTask, deleteAllTasks, addTask, cha
       }
       <div>
         <div>
-          <Button className={filter === "all" ? "active-filter" : ""} title={"all"} onClick={() => setFilter("all")}/>
-          <Button className={filter === "active" ? "active-filter" : ""} title={"active"} onClick={() => setFilter("active")}/>
-          <Button className={filter === "completed" ? "active-filter" : ""} title={"completed"} onClick={() => setFilter("completed")}/>
+          <Button className={filter === "all" ? "active-filter" : ""}
+                  title={"all"}
+                  onClick={() => changeFilterHandler("all")}
+          />
+          <Button className={filter === "active" ? "active-filter" : ""}
+                  title={"active"}
+                  onClick={() => changeFilterHandler("active")}
+          />
+          <Button className={filter === "completed" ? "active-filter" : ""}
+                  title={"completed"}
+                  onClick={() => changeFilterHandler("completed")}
+          />
         </div>
         <div>
           <Button title={"Delete all tasks"} onClick={deleteAllTasks}/>
