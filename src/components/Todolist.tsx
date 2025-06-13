@@ -3,6 +3,7 @@ import {Button} from "./Button.tsx";
 import {Task} from "./Task.tsx";
 import {AddItemForm} from "./AddItemForm.tsx";
 
+
 type Props = {
   todolist: TodolistType
   tasks: TasksStateType
@@ -13,6 +14,7 @@ type Props = {
   addTask: (todoId: string, taskTitle: string) => void
   changeTaskStatus: (todoId: string, taskId: string, isDone: boolean) => void
   changeFilter: (todoId: string, filter: FilterValues) => void
+  updateTaskTitle: (todoId: string, taskId: string, newTitle: string) => void
 }
 
 export const Todolist = (props: Props) => {
@@ -25,7 +27,8 @@ export const Todolist = (props: Props) => {
     deleteAllTasks,
     addTask,
     changeTaskStatus,
-    changeFilter
+    changeFilter,
+    updateTaskTitle
   } = props
 
   const addTaskHandler = (taskTitle: string) => {
@@ -39,6 +42,9 @@ export const Todolist = (props: Props) => {
   }
   const changeTaskStatusHandler = (taskId: string, isDone: boolean) => {
     changeTaskStatus(todolist.id, taskId, isDone)
+  }
+  const updateTaskTitleHandler = (taskId: string, updateTitle: string) => {
+    updateTaskTitle(todolist.id, taskId, updateTitle)
   }
 
   const getFilteredTasks = () => {
@@ -59,7 +65,12 @@ export const Todolist = (props: Props) => {
 
   const mappedArrTasks = getFilteredTasks().map(t => {
     return (
-      <Task key={t.id} task={t} deleteTask={deleteTaskHandler} changeTaskStatus={changeTaskStatusHandler}/>
+      <Task key={t.id}
+            task={t}
+            deleteTask={deleteTaskHandler}
+            changeTaskStatus={changeTaskStatusHandler}
+            updateTaskTitle={updateTaskTitleHandler}
+      />
     )
   })
 
