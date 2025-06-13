@@ -1,6 +1,7 @@
 import './App.css'
 import {Todolist} from "./components/Todolist.tsx";
 import {useState} from "react";
+import {AddItemForm} from "./components/AddItemForm.tsx";
 
 export type TaskType = {
   id: string
@@ -46,13 +47,19 @@ export const App = () => {
     setTodolists(todolists.filter(tl => tl.id !== todoId))
     deleteAllTasks(todoId)
   }
+  const addTodolist = (todoTitle: string) => {
+    const newTodoId = crypto.randomUUID()
+    const newTodo: TodolistType = {id: newTodoId, title: todoTitle, filter: "all"}
+
+    setTodolists([newTodo, ...todolists])
+    setTasks({...tasks, [newTodoId]: []})
+  }
 
   const deleteAllTasks = (todoId: string) => {
     const copyState = {...tasks}
     delete copyState[todoId]
     setTasks(copyState)
   }
-
   const deleteTask = (todoId: string, taskId: string) => {
     setTasks({...tasks, [todoId]: tasks[todoId].filter(t => t.id !== taskId)})
   }
@@ -73,6 +80,9 @@ export const App = () => {
 
   return (
     <div className="app">
+      <div>
+        <AddItemForm addItem={addTodolist}/>
+      </div>
       {
         todolists.map(el => (
           <Todolist key={el.id}
