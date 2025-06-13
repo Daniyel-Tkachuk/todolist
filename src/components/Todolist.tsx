@@ -2,6 +2,7 @@ import {FilterValues, TasksStateType, TodolistType} from "../App.tsx";
 import {Button} from "./Button.tsx";
 import {Task} from "./Task.tsx";
 import {AddItemForm} from "./AddItemForm.tsx";
+import {EditableSpan} from "./EditableSpan.tsx";
 
 
 type Props = {
@@ -15,6 +16,7 @@ type Props = {
   changeTaskStatus: (todoId: string, taskId: string, isDone: boolean) => void
   changeFilter: (todoId: string, filter: FilterValues) => void
   updateTaskTitle: (todoId: string, taskId: string, newTitle: string) => void
+  updateTodolistTitle: (todoId: string, newTitle: string) => void
 }
 
 export const Todolist = (props: Props) => {
@@ -28,7 +30,8 @@ export const Todolist = (props: Props) => {
     addTask,
     changeTaskStatus,
     changeFilter,
-    updateTaskTitle
+    updateTaskTitle,
+    updateTodolistTitle
   } = props
 
   const addTaskHandler = (taskTitle: string) => {
@@ -46,6 +49,13 @@ export const Todolist = (props: Props) => {
   const updateTaskTitleHandler = (taskId: string, updateTitle: string) => {
     updateTaskTitle(todolist.id, taskId, updateTitle)
   }
+  const updateTodolistTitleHandler = (newTitle: string) => {
+    updateTodolistTitle(todolist.id, newTitle)
+  }
+  const removeTodolistHandler = () => {
+    removeTodolist(todolist.id)
+  }
+
 
   const getFilteredTasks = () => {
     let tasksForTodolist = tasks[todolist.id] || []
@@ -76,8 +86,9 @@ export const Todolist = (props: Props) => {
 
   return (
     <div>
-      <h3 style={{display: "inline-block", marginRight: "10px"}}>{todolist.title}</h3>
-      <Button title="X" onClick={() => removeTodolist(todolist.id)}/>
+      <h3>
+        <EditableSpan oldTitle={todolist.title} updateTitle={updateTodolistTitleHandler} onClick={removeTodolistHandler}/>
+      </h3>
       <div>
         <AddItemForm addItem={addTaskHandler}/>
       </div>

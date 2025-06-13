@@ -26,7 +26,7 @@ export const Task = ({task, deleteTask, changeTaskStatus, updateTaskTitle}: Prop
   return (
     <li className={task.isDone ? "is-done" : ""}>
       <input type="checkbox" checked={task.isDone} onChange={changeTaskStatusHandler}/>
-      <EditableSpan oldTitle={task.title} onClick={deleteTaskHandler} updateTaskTitle={updateTaskTitleHandler}/>
+      <EditableSpan oldTitle={task.title} onClick={deleteTaskHandler} updateTitle={updateTaskTitleHandler}/>
     </li>
   );
 };

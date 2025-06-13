@@ -4,12 +4,12 @@ import {Button} from "./Button.tsx";
 type Props = {
   oldTitle: string
   onClick: () => void
-  updateTaskTitle: (updateTitle: string) => void
+  updateTitle: (newTitle: string) => void
 }
 
-export const EditableSpan = ({oldTitle, onClick, updateTaskTitle}: Props) => {
+export const EditableSpan = ({oldTitle, onClick, updateTitle}: Props) => {
   const [edit, setEdit] = useState(false)
-  const [updateTitle, setUpdateTitle] = useState(oldTitle)
+  const [newTitle, setNewTitle] = useState(oldTitle)
 
   const onClickHandler = () => {
     onClick()
@@ -20,19 +20,19 @@ export const EditableSpan = ({oldTitle, onClick, updateTaskTitle}: Props) => {
   }
 
   const onBlurHandler = () => {
-    updateTaskTitle(updateTitle)
+    updateTitle(newTitle)
     setEdit(false);
   }
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setUpdateTitle(e.currentTarget.value)
+    setNewTitle(e.currentTarget.value)
   }
 
   return (
     <>
       {
         edit
-          ? <input type="text" value={updateTitle} autoFocus onChange={onChangeHandler} onBlur={onBlurHandler}/>
+          ? <input type="text" value={newTitle} autoFocus onChange={onChangeHandler} onBlur={onBlurHandler}/>
           : <span style={{display: "inline-block", marginRight: "10px"}}
                   onDoubleClick={onEditHandler}>{oldTitle}</span>
       }
