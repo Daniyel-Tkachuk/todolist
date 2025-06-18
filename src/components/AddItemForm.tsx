@@ -1,5 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 
 type Props = {
   addItem: (title: string) => void
@@ -29,23 +30,26 @@ export const AddItemForm = ({addItem}: Props) => {
   }
 
   const buttonStyle = {
-    maxWidth: "30px",
-    maxHeight: "30px",
-    minWidth: "30px",
-    minHeight: "30px",
+    maxWidth: "38px",
+    maxHeight: "38px",
+    minWidth: "38px",
+    minHeight: "38px",
     fontSize: "16px",
     fontWeight: 500
   }
 
   return (
     <>
-      <input type="text"
-             className={error ? "error" : ""}
-             value={title}
-             onChange={setTitleHandler}
-             onKeyDown={onEnterHandler}/>
+      <TextField className={error ? "error" : ""}
+                 error={!!error}
+                 size="small"
+                 value={title}
+                 label={error ? error : "Enter text"}
+                 variant="outlined"
+                 onChange={setTitleHandler}
+                 onKeyDown={onEnterHandler}
+      />
       <Button style={buttonStyle} variant="contained" size="small" onClick={addItemHandler}>+</Button>
-      {error && <div className="error-message">{error}</div>}
     </>
   );
 };

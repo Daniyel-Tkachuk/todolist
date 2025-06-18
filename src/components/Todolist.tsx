@@ -112,19 +112,6 @@ export const Todolist = (props: Props) => {
                   onClick={() => changeFilterHandler("active")}>active</Button>
           <Button variant={filter === "completed" ? "contained" : "outlined"}
                   onClick={() => changeFilterHandler("completed")}>completed</Button>
-
-          {/*<Button className={filter === "all" ? "active-filter" : ""}
-                  title={"all"}
-                  onClick={() => changeFilterHandler("all")}
-          />
-          <Button className={filter === "active" ? "active-filter" : ""}
-                  title={"active"}
-                  onClick={() => changeFilterHandler("active")}
-          />
-          <Button className={filter === "completed" ? "active-filter" : ""}
-                  title={"completed"}
-                  onClick={() => changeFilterHandler("completed")}
-          />*/}
         </div>
         <div>
           <Button title={"Delete all tasks"} onClick={() => deleteAllTasks(todolist.id)}/>
