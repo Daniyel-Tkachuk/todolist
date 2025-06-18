@@ -1,5 +1,5 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
-import {Button} from "./Button.tsx";
+import Button from "@mui/material/Button";
 
 type Props = {
   addItem: (title: string) => void
@@ -28,6 +28,15 @@ export const AddItemForm = ({addItem}: Props) => {
     }
   }
 
+  const buttonStyle = {
+    maxWidth: "30px",
+    maxHeight: "30px",
+    minWidth: "30px",
+    minHeight: "30px",
+    fontSize: "16px",
+    fontWeight: 500
+  }
+
   return (
     <>
       <input type="text"
@@ -35,7 +44,7 @@ export const AddItemForm = ({addItem}: Props) => {
              value={title}
              onChange={setTitleHandler}
              onKeyDown={onEnterHandler}/>
-      <Button title="+" onClick={addItemHandler}/>
+      <Button style={buttonStyle} variant="contained" size="small" onClick={addItemHandler}>+</Button>
       {error && <div className="error-message">{error}</div>}
     </>
   );

@@ -1,8 +1,10 @@
 import {FilterValues, TasksStateType, TodolistType} from "../App.tsx";
-import {Button} from "./Button.tsx";
 import {Task} from "./Task.tsx";
 import {AddItemForm} from "./AddItemForm.tsx";
 import {EditableSpan} from "./EditableSpan.tsx";
+import {IconButton} from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
+import Button from "@mui/material/Button";
 
 
 type Props = {
@@ -87,7 +89,10 @@ export const Todolist = (props: Props) => {
   return (
     <div>
       <h3>
-        <EditableSpan oldTitle={todolist.title} updateTitle={updateTodolistTitleHandler} onClick={removeTodolistHandler}/>
+        <EditableSpan oldTitle={todolist.title} updateTitle={updateTodolistTitleHandler}/>
+        <IconButton aria-label="delete" onClick={removeTodolistHandler}>
+          <DeleteIcon/>
+        </IconButton>
       </h3>
       <div>
         <AddItemForm addItem={addTaskHandler}/>
@@ -101,7 +106,14 @@ export const Todolist = (props: Props) => {
       }
       <div>
         <div>
-          <Button className={filter === "all" ? "active-filter" : ""}
+          <Button variant={filter === "all" ? "contained" : "outlined"}
+                  onClick={() => changeFilterHandler("all")}>all</Button>
+          <Button variant={filter === "active" ? "contained" : "outlined"}
+                  onClick={() => changeFilterHandler("active")}>active</Button>
+          <Button variant={filter === "completed" ? "contained" : "outlined"}
+                  onClick={() => changeFilterHandler("completed")}>completed</Button>
+
+          {/*<Button className={filter === "all" ? "active-filter" : ""}
                   title={"all"}
                   onClick={() => changeFilterHandler("all")}
           />
@@ -112,7 +124,7 @@ export const Todolist = (props: Props) => {
           <Button className={filter === "completed" ? "active-filter" : ""}
                   title={"completed"}
                   onClick={() => changeFilterHandler("completed")}
-          />
+          />*/}
         </div>
         <div>
           <Button title={"Delete all tasks"} onClick={() => deleteAllTasks(todolist.id)}/>

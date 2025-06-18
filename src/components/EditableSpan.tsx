@@ -1,19 +1,13 @@
 import React, {ChangeEvent, useState} from 'react';
-import {Button} from "./Button.tsx";
 
 type Props = {
   oldTitle: string
-  onClick: () => void
   updateTitle: (newTitle: string) => void
 }
 
-export const EditableSpan = ({oldTitle, onClick, updateTitle}: Props) => {
+export const EditableSpan = ({oldTitle, updateTitle}: Props) => {
   const [edit, setEdit] = useState(false)
   const [newTitle, setNewTitle] = useState(oldTitle)
-
-  const onClickHandler = () => {
-    onClick()
-  }
 
   const onEditHandler = () => {
     setEdit(true)
@@ -36,7 +30,6 @@ export const EditableSpan = ({oldTitle, onClick, updateTitle}: Props) => {
           : <span style={{display: "inline-block", marginRight: "10px"}}
                   onDoubleClick={onEditHandler}>{oldTitle}</span>
       }
-      <Button title="X" onClick={onClickHandler}/>
     </>
   );
 };
