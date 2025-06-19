@@ -5,6 +5,9 @@ import {EditableSpan} from "./EditableSpan.tsx";
 import {IconButton} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from "@mui/material/Button";
+import List from '@mui/material/List';
+import {filterButtonsContainerSx} from "../Todolists.styles.ts";
+import Box from "@mui/material/Box";
 
 
 type Props = {
@@ -100,21 +103,25 @@ export const Todolist = (props: Props) => {
       {
         mappedArrTasks.length === 0
           ? <p>Тасок нет</p>
-          : <ul>
-            {mappedArrTasks}
-          </ul>
+          : <List>
+              {mappedArrTasks}
+            </List>
       }
       <div>
-        <div>
+        <Box sx={filterButtonsContainerSx}>
           <Button variant={filter === "all" ? "contained" : "outlined"}
                   onClick={() => changeFilterHandler("all")}>all</Button>
           <Button variant={filter === "active" ? "contained" : "outlined"}
                   onClick={() => changeFilterHandler("active")}>active</Button>
           <Button variant={filter === "completed" ? "contained" : "outlined"}
                   onClick={() => changeFilterHandler("completed")}>completed</Button>
-        </div>
+        </Box>
         <div>
-          <Button title={"Delete all tasks"} onClick={() => deleteAllTasks(todolist.id)}/>
+          <Button sx={{mt: "20px"}}
+                  size="small"
+                  variant="contained"
+                  onClick={() => deleteAllTasks(todolist.id)}
+                  color="error">Delete all tasks</Button>
         </div>
       </div>
     </div>

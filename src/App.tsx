@@ -1,7 +1,12 @@
+import * as React from "react";
 import './App.css'
 import {Todolist} from "./components/Todolist.tsx";
 import {useState} from "react";
 import {AddItemForm} from "./components/AddItemForm.tsx";
+import Box from "@mui/material/Box";
+import {Container, createTheme, CssBaseline, Grid, Paper, ThemeProvider} from "@mui/material";
+import Header from "./components/Header.tsx";
+
 
 export type TaskType = {
   id: string
@@ -20,11 +25,13 @@ export type TodolistType = {
 }
 
 export type FilterValues = "all" | "active" | "completed"
-
+export type ThemeMode = 'light' | 'dark'
 
 export const App = () => {
   const todolistId_1 = crypto.randomUUID()
   const todolistId_2 = crypto.randomUUID()
+
+  const [themeMode, setThemeMode] = useState<ThemeMode>('light')
 
   const [todolists, setTodolists] = useState<TodolistType[]>([
     {id: todolistId_1, title: 'What to learn', filter: 'all'},
@@ -41,6 +48,15 @@ export const App = () => {
       {id: crypto.randomUUID(), title: 'Rest API', isDone: true},
       {id: crypto.randomUUID(), title: 'GraphQL', isDone: false},
     ],
+  })
+
+  const theme = createTheme({
+    palette: {
+      mode: themeMode,
+      primary: {
+        main: "#087EA4"
+      }
+    }
   })
 
   const removeTodolist = (todoId: string) => {
@@ -83,30 +99,46 @@ export const App = () => {
     setTasks({...tasks, [todoId]: tasks[todoId].map(t => t.id === taskId ? {...t, title: updateTitle} : t)})
   }
 
+  const changeMode = () => {
+    setThemeMode(themeMode === 'light' ? 'dark' : 'light')
+  }
 
 
   return (
-    <div className="app">
-      <div>
-        <AddItemForm addItem={addTodolist}/>
-      </div>
-      {
-        todolists.map(el => (
-          <Todolist key={el.id}
-                    todolist={el}
-                    tasks={tasks}
-                    filter={el.filter}
-                    removeTodolist={removeTodolist}
-                    deleteTask={deleteTask}
-                    deleteAllTasks={deleteAllTasks}
-                    addTask={addTask}
-                    changeTaskStatus={changeTaskStatus}
-                    changeFilter={changeFilter}
-                    updateTaskTitle={updateTaskTitle}
-                    updateTodolistTitle={updateTodolistTitle}
-          />
-        ))
-      }
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Header changeMode={changeMode}/>
+      <Container fixed maxWidth="xl">
+        <Grid container sx={{m: "95px 0 30px"}}>
+          <Box>
+            <AddItemForm addItem={addTodolist}/>
+          </Box>
+        </Grid>
+
+        <Grid container spacing={3}>
+          {
+            todolists.map(el => (
+              <Grid size={3} sx={{maxWidth: "500px"}}>
+                <Paper elevation={5} sx={{p: "10px 30px 20px 35px"}}>
+                  <Todolist key={el.id}
+                            todolist={el}
+                            tasks={tasks}
+                            filter={el.filter}
+                            removeTodolist={removeTodolist}
+                            deleteTask={deleteTask}
+                            deleteAllTasks={deleteAllTasks}
+                            addTask={addTask}
+                            changeTaskStatus={changeTaskStatus}
+                            changeFilter={changeFilter}
+                            updateTaskTitle={updateTaskTitle}
+                            updateTodolistTitle={updateTodolistTitle}
+                  />
+                </Paper>
+              </Grid>
+            ))
+          }
+        </Grid>
+      </Container>
+    </ThemeProvider>
   )
 }

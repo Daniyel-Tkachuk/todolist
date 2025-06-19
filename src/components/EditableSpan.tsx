@@ -27,7 +27,7 @@ export const EditableSpan = ({oldTitle, updateTitle}: Props) => {
       {
         edit
           ? <input type="text" value={newTitle} autoFocus onChange={onChangeHandler} onBlur={onBlurHandler}/>
-          : <span style={{display: "inline-block", marginRight: "10px"}}
+          : <span style={{display: "inline-block", marginRight: "10px", wordBreak: "break-word"}}
                   onDoubleClick={onEditHandler}>{oldTitle}</span>
       }
     </>
