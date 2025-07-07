@@ -79,11 +79,12 @@ export const App = () => {
 
   const removeTodolist = (todoId: string) => {
     dispatchTodolist(removeTodolistAC(todoId))
-    deleteAllTasks(todoId)
+    dispatchTasks(removeTodolistAC(todoId))
   }
   const addTodolist = (todoTitle: string) => {
     const newTodoId = crypto.randomUUID()
     dispatchTodolist(createTodolistAC(newTodoId, todoTitle))
+    dispatchTasks(createTodolistAC(newTodoId, todoTitle))
   }
   const updateTodolistTitle = (todoId: string, newTitle: string) => {
     dispatchTodolist(updateTodolistAC(todoId, newTitle))
