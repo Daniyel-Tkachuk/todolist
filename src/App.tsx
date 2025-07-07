@@ -64,6 +64,10 @@ export const App = () => {
     ],
   })
 
+
+  console.log("todolists -->", todolists)
+  console.log("tasks -->", tasks)
+
   const theme = createTheme({
     palette: {
       mode: themeMode,
@@ -79,8 +83,7 @@ export const App = () => {
   }
   const addTodolist = (todoTitle: string) => {
     const newTodoId = crypto.randomUUID()
-    dispatchTodolist(createTodolistAC(todoTitle))
-    // setTasks({...tasks, [newTodoId]: []})
+    dispatchTodolist(createTodolistAC(newTodoId, todoTitle))
   }
   const updateTodolistTitle = (todoId: string, newTitle: string) => {
     dispatchTodolist(updateTodolistAC(todoId, newTitle))
@@ -123,21 +126,21 @@ export const App = () => {
 
         <Grid container spacing={3}>
           {
-            todolists.map(el => (
-              <Grid size={3} sx={{maxWidth: "500px"}}>
+            todolists?.map(el => (
+              <Grid size={3} sx={{maxWidth: "500px"}} key={el.id}>
                 <Paper elevation={5} sx={{p: "10px 30px 20px 35px"}}>
-                  <Todolist key={el.id}
-                            todolist={el}
-                            tasks={tasks}
-                            filter={el.filter}
-                            removeTodolist={removeTodolist}
-                            deleteTask={deleteTask}
-                            deleteAllTasks={deleteAllTasks}
-                            addTask={addTask}
-                            changeTaskStatus={changeTaskStatus}
-                            changeFilter={changeFilter}
-                            updateTaskTitle={updateTaskTitle}
-                            updateTodolistTitle={updateTodolistTitle}
+                  <Todolist
+                    todolist={el}
+                    tasks={tasks}
+                    filter={el.filter}
+                    removeTodolist={removeTodolist}
+                    deleteTask={deleteTask}
+                    deleteAllTasks={deleteAllTasks}
+                    addTask={addTask}
+                    changeTaskStatus={changeTaskStatus}
+                    changeFilter={changeFilter}
+                    updateTaskTitle={updateTaskTitle}
+                    updateTodolistTitle={updateTodolistTitle}
                   />
                 </Paper>
               </Grid>

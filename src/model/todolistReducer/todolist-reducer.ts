@@ -15,7 +15,7 @@ export const todolistReducer = (state = initialState, action: ActionsType): Todo
     }
     case "todolist/createTodolist": {
       const newTodolist: TodolistType = {
-        id: crypto.randomUUID(),
+        id: action.payload.todoId,
         title: action.payload.title,
         filter: "all"
       }
@@ -41,10 +41,11 @@ export const removeTodolistAC = (id: string) => ({
     id
   }
 } as const)
-export const createTodolistAC = (title: string) => ({
+export const createTodolistAC = (todoId: string, title: string) => ({
   type: "todolist/createTodolist",
   payload: {
-    title
+    title,
+    todoId
   }
 } as const)
 export const updateTodolistAC = (id: string, title: string) => ({
@@ -63,8 +64,8 @@ export const changeTodolistFilterAC = (id: string, filter: FilterValues) => ({
 } as const)
 
 
-type RemoveTodolistAT = ReturnType<typeof removeTodolistAC>
-type CreateTodolistAT = ReturnType<typeof createTodolistAC>
+export type RemoveTodolistAT = ReturnType<typeof removeTodolistAC>
+export type CreateTodolistAT = ReturnType<typeof createTodolistAC>
 type UpdateTodolistAT = ReturnType<typeof updateTodolistAC>
 type ChangeTodolistFilterAT = ReturnType<typeof changeTodolistFilterAC>
 

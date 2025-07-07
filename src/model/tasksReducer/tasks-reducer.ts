@@ -1,9 +1,20 @@
 import {TasksStateType, TaskType} from "../../App.tsx";
+import {CreateTodolistAT, RemoveTodolistAT} from "../todolistReducer/todolist-reducer.ts";
 
 const initialState: TasksStateType = {}
 
 export const tasksReducer = (state = initialState, action: ActionsType): TasksStateType => {
   switch (action.type) {
+    case "todolist/createTodolist": {
+      return {
+        ...state,
+        [action.payload.todoId]: []
+      }
+    }
+    case "todolist/removeTodolist": {
+      const {[action.payload.id]: _, ...rest} = state
+      return rest
+    }
     case "tasks/deleteTask": {
       const {todoId, taskId} = action.payload
       return {
@@ -39,8 +50,10 @@ export const tasksReducer = (state = initialState, action: ActionsType): TasksSt
       }
     }
     case "tasks/deleteAllTasks": {
-      const {[action.payload.todoId]: _, ...rest} = state
-      return rest
+      return {
+        ...state,
+        [action.payload.todoId]: []
+      }
     }
     default: {
       return state
@@ -96,3 +109,5 @@ type ActionsType = DeleteTaskAT
   | ChangeTaskStatusAT
   | UpdateTaskTitleAT
   | DeleteAllTasksAT
+  | CreateTodolistAT
+  | RemoveTodolistAT
