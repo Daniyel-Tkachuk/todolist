@@ -15,30 +15,12 @@ import {
 } from "./model/tasksReducer/tasks-reducer.ts";
 import {
   changeTodolistFilterAC,
-  createTodolistAC,
+  createTodolistAC, FilterValues,
   removeTodolistAC,
   todolistReducer,
   updateTodolistAC
 } from "./model/todolistReducer/todolist-reducer.ts";
 
-
-export type TaskType = {
-  id: string
-  title: string
-  isDone: boolean
-}
-
-export type TasksStateType = {
-  [key: string]: TaskType[]
-}
-
-export type TodolistType = {
-  id: string
-  title: string
-  filter: FilterValues
-}
-
-export type FilterValues = "all" | "active" | "completed"
 export type ThemeMode = 'light' | 'dark'
 
 export const App = () => {

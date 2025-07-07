@@ -1,5 +1,15 @@
-import {TasksStateType, TaskType} from "../../App.tsx";
 import {CreateTodolistAT, RemoveTodolistAT} from "../todolistReducer/todolist-reducer.ts";
+
+export type TaskType = {
+  id: string
+  title: string
+  isDone: boolean
+}
+
+export type TasksStateType = {
+  [key: string]: TaskType[]
+}
+
 
 const initialState: TasksStateType = {}
 
@@ -7,8 +17,8 @@ export const tasksReducer = (state = initialState, action: ActionsType): TasksSt
   switch (action.type) {
     case "todolist/createTodolist": {
       return {
+        [action.payload.todoId]: [],
         ...state,
-        [action.payload.todoId]: []
       }
     }
     case "todolist/removeTodolist": {

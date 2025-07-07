@@ -1,4 +1,10 @@
-import {FilterValues, TodolistType} from "../../App.tsx";
+export type FilterValues = "all" | "active" | "completed"
+
+export type TodolistType = {
+  id: string
+  title: string
+  filter: FilterValues
+}
 
 const todolistId_1 = crypto.randomUUID()
 const todolistId_2 = crypto.randomUUID()

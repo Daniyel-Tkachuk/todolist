@@ -1,4 +1,3 @@
-import {FilterValues, TasksStateType, TodolistType} from "../App.tsx";
 import {Task} from "./Task.tsx";
 import {AddItemForm} from "./AddItemForm.tsx";
 import {EditableSpan} from "./EditableSpan.tsx";
@@ -8,6 +7,8 @@ import Button from "@mui/material/Button";
 import List from '@mui/material/List';
 import {filterButtonsContainerSx} from "../Todolists.styles.ts";
 import Box from "@mui/material/Box";
+import {FilterValues, TodolistType} from "../model/todolistReducer/todolist-reducer.ts";
+import {TasksStateType} from "../model/tasksReducer/tasks-reducer.ts";
 
 
 type Props = {

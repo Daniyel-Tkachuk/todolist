@@ -28,12 +28,15 @@ test("correct todolist should be removed", () => {
 })
 test("correct todolist should be added", () => {
   const newTitle = "New Todolist"
-  const endState = todolistReducer(todolists, createTodolistAC(newTitle))
+  const newTodoId = crypto.randomUUID()
+  const endState = todolistReducer(todolists, createTodolistAC(newTodoId, newTitle))
 
   expect(endState.length).toBe(3)
+  expect(endState[0].id).toBe(newTodoId)
   expect(endState[0].title).toBe(newTitle)
   expect(endState[1].id).toBe(todolistId_1)
   expect(endState[2].id).toBe(todolistId_2)
+
 })
 test("correct todolist should be updated title", () => {
   const endState = todolistReducer(todolists, updateTodolistAC(todolistId_2, "Проверка"))
