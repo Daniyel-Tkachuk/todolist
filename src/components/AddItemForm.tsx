@@ -33,9 +33,10 @@ export const AddItemForm = ({addItem}: Props) => {
     maxWidth: "38px",
     maxHeight: "38px",
     minWidth: "38px",
-    minHeight: "38px",
+    minHeight: "40px",
     fontSize: "16px",
-    fontWeight: 500
+    fontWeight: 500,
+    borderRadius: "0 4px 4px 0",
   }
 
   return (
@@ -46,6 +47,11 @@ export const AddItemForm = ({addItem}: Props) => {
                  value={title}
                  label={error ? error : "Enter text"}
                  variant="outlined"
+                 sx={{
+                   "& .MuiInputBase-root": {
+                     borderRadius: "4px 0 0 4px"
+                   }
+                 }}
                  onChange={setTitleHandler}
                  onKeyDown={onEnterHandler}
       />

@@ -1,11 +1,25 @@
 import * as React from "react";
 import './App.css'
 import {Todolist} from "./components/Todolist.tsx";
-import {useState} from "react";
+import {useReducer, useState} from "react";
 import {AddItemForm} from "./components/AddItemForm.tsx";
 import Box from "@mui/material/Box";
 import {Container, createTheme, CssBaseline, Grid, Paper, ThemeProvider} from "@mui/material";
 import Header from "./components/Header.tsx";
+import {
+  changeTaskStatusAC,
+  createTaskAC, deleteAllTasksAC,
+  deleteTaskAC,
+  tasksReducer,
+  updateTaskTitleAC
+} from "./model/tasksReducer/tasks-reducer.ts";
+import {
+  changeTodolistFilterAC,
+  createTodolistAC,
+  removeTodolistAC,
+  todolistReducer,
+  updateTodolistAC
+} from "./model/todolistReducer/todolist-reducer.ts";
 
 
 export type TaskType = {
@@ -33,12 +47,12 @@ export const App = () => {
 
   const [themeMode, setThemeMode] = useState<ThemeMode>('light')
 
-  const [todolists, setTodolists] = useState<TodolistType[]>([
+  const [todolists, dispatchTodolist] = useReducer(todolistReducer, [
     {id: todolistId_1, title: 'What to learn', filter: 'all'},
     {id: todolistId_2, title: 'What to buy', filter: 'all'},
   ])
 
-  const [tasks, setTasks] = useState<TasksStateType>({
+  const [tasks, dispatchTasks] = useReducer(tasksReducer, {
     [todolistId_1]: [
       {id: crypto.randomUUID(), title: 'HTML&CSS', isDone: true},
       {id: crypto.randomUUID(), title: 'JS', isDone: true},
@@ -54,49 +68,41 @@ export const App = () => {
     palette: {
       mode: themeMode,
       primary: {
-        main: "#087EA4"
+        main: "#087EA4",
       }
     }
   })
 
   const removeTodolist = (todoId: string) => {
-    setTodolists(todolists.filter(tl => tl.id !== todoId))
+    dispatchTodolist(removeTodolistAC(todoId))
     deleteAllTasks(todoId)
   }
   const addTodolist = (todoTitle: string) => {
     const newTodoId = crypto.randomUUID()
-    const newTodo: TodolistType = {id: newTodoId, title: todoTitle, filter: "all"}
-
-    setTodolists([newTodo, ...todolists])
-    setTasks({...tasks, [newTodoId]: []})
+    dispatchTodolist(createTodolistAC(todoTitle))
+    // setTasks({...tasks, [newTodoId]: []})
   }
   const updateTodolistTitle = (todoId: string, newTitle: string) => {
-    setTodolists(todolists.map(tl => tl.id === todoId ? {...tl, title: newTitle} : tl))
+    dispatchTodolist(updateTodolistAC(todoId, newTitle))
+  }
+  const changeFilter = (todoId: string, filter: FilterValues) => {
+    dispatchTodolist(changeTodolistFilterAC(todoId, filter))
   }
 
   const deleteAllTasks = (todoId: string) => {
-    const copyState = {...tasks}
-    delete copyState[todoId]
-    setTasks(copyState)
+    dispatchTasks(deleteAllTasksAC(todoId))
   }
   const deleteTask = (todoId: string, taskId: string) => {
-    setTasks({...tasks, [todoId]: tasks[todoId].filter(t => t.id !== taskId)})
-  }
-  const changeTaskStatus = (todoId: string, taskId: string, isDone: boolean) => {
-    setTasks({...tasks, [todoId]: tasks[todoId].map(t => t.id === taskId ? {...t, isDone} : t)})
-  }
-  const createTask = (id: string, taskTitle: string, isDone: boolean = false): TaskType => {
-    return {id, title: taskTitle, isDone}
+    dispatchTasks(deleteTaskAC(todoId, taskId))
   }
   const addTask = (todoId: string, taskTitle: string) => {
-    const newTask = createTask(crypto.randomUUID(), taskTitle);
-    setTasks({...tasks, [todoId]: [newTask, ...tasks[todoId]]})
+    dispatchTasks(createTaskAC(todoId, taskTitle))
   }
-  const changeFilter = (todoId: string, filter: FilterValues) => {
-    setTodolists(todolists.map(tl => tl.id === todoId ? {...tl, filter} : tl))
+  const changeTaskStatus = (todoId: string, taskId: string, isDone: boolean) => {
+    dispatchTasks(changeTaskStatusAC(todoId, taskId, isDone))
   }
   const updateTaskTitle = (todoId: string, taskId: string, updateTitle: string) => {
-    setTasks({...tasks, [todoId]: tasks[todoId].map(t => t.id === taskId ? {...t, title: updateTitle} : t)})
+    dispatchTasks(updateTaskTitleAC(todoId, taskId, updateTitle))
   }
 
   const changeMode = () => {
@@ -106,7 +112,7 @@ export const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
+      <CssBaseline/>
       <Header changeMode={changeMode}/>
       <Container fixed maxWidth="xl">
         <Grid container sx={{m: "95px 0 30px"}}>
