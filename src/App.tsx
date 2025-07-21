@@ -54,7 +54,7 @@ export const App = () => {
     palette: {
       mode: themeMode,
       primary: {
-        main: "#087EA4",
+        main: "#087EA4"
       }
     }
   })
