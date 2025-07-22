@@ -10,7 +10,7 @@ const rootReducer = combineReducers({
 
 // создание store
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: rootReducer
 })
 
 // автоматическое определение типа всего объекта состояния
