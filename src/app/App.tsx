@@ -76,7 +76,7 @@ export const App = () => {
   }
 
   const deleteTodolist = (todolistId: string) => {
-    dispatch(deleteTodolistAC(todolistId))
+    dispatch(deleteTodolistAC({id: todolistId}))
   }
 
   const changeTodolistTitle = (todolistId: string, title: string) => {
