@@ -10,16 +10,13 @@ export const Todolists = () => {
 
   return (
     <>
-      {todolists.map(todolist => {
-
-        return (
-          <Grid key={todolist.id}>
-            <Paper sx={{p: '0 20px 20px 20px'}}>
-              <TodolistItem todolist={todolist}/>
-            </Paper>
-          </Grid>
-        )
-      })}
+      {todolists.map(todolist => (
+        <Grid key={todolist.id}>
+          <Paper sx={{p: '0 20px 20px 20px'}}>
+            <TodolistItem todolist={todolist}/>
+          </Paper>
+        </Grid>
+      ))}
     </>
   )
 }
