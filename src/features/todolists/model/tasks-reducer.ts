@@ -1,4 +1,4 @@
-import {createTodolistAC, deleteTodolistAC} from './todolists-reducer'
+import {createTodolistAC, deleteTodolistAC} from './todolists-reducer.ts'
 import {createAction, createReducer, nanoid} from "@reduxjs/toolkit";
 
 export type Task = {
