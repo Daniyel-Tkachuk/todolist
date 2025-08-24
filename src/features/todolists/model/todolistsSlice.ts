@@ -10,20 +10,12 @@ const todolistsSlice = createSlice({
         state.splice(index, 1)
       }
     }),
-    /*createTodolistAC: create.preparedReducer(
+    createTodolistAC: create.preparedReducer(
       (title: string) => ({ payload: { id: nanoid(), title } }),
       (state, action) => {
         state.push({ ...action.payload, filter: "all" })
       },
-    ),*/
-    createTodolistAC: create.reducer<{title: string}>((state, action) => {
-      const newTodolist: Todolist = {
-        id: nanoid(),
-        title: action.payload.title,
-        filter: "all",
-      }
-      state.push(newTodolist)
-    }),
+    ),
     changeTodolistTitleAC: create.reducer<{ id: string; title: string }>((state, action) => {
       const index = state.findIndex((tl) => tl.id === action.payload.id)
       if (index !== -1) {

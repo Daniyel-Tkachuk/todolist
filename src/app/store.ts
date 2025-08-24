@@ -5,8 +5,8 @@ import { todolistsReducer } from "@/features/todolists/model/todolistsSlice.ts"
 
 // объединение reducer'ов с помощью combineReducers
 const rootReducer = combineReducers({
-  tasks: tasksReducer,
   todolists: todolistsReducer,
+  tasks: tasksReducer,
   app: appReducer,
 })
 
