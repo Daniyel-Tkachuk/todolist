@@ -48,6 +48,9 @@ export const todolistsSlice = createSlice({
         console.log(action.payload.message)
       })
   },
+  selectors: {
+    selectTodolists: (state) => state
+  }
 })
 
 export const fetchTodolistsTC = createAsyncThunk(
@@ -107,6 +110,7 @@ export const deleteTodolistTC = createAsyncThunk(
 
 export const { changeTodolistFilterAC } = todolistsSlice.actions
 export const todolistsReducer = todolistsSlice.reducer
+export const {selectTodolists} = todolistsSlice.selectors
 
 export type DomainTodolists = Todolist & {
   filter: FilterValues
