@@ -41,10 +41,14 @@ export const tasksSlice = createSlice({
       .addCase(deleteTodolistAC, (state, {payload}) => {
         delete state[payload.id]
       })
+  },
+  selectors: {
+    selectTasks: (state) => state
   }
 })
 
 export const {deleteTaskAC, createTaskAC, changeTaskStatusAC, changeTaskTitleAC} = tasksSlice.actions
+export const {selectTasks} = tasksSlice.selectors
 export const tasksReducer = tasksSlice.reducer
 
 
