@@ -1,11 +1,28 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk } from "@reduxjs/toolkit"
 import { Todolist } from "@/features/todolists/api/todolistsApi.types.ts"
 import { todolistsApi } from "@/features/todolists/api/todolistsApi.ts"
+import { createAppSlice } from "@/common/utils"
 
-export const todolistsSlice = createSlice({
+export const todolistsSlice = createAppSlice({
   name: "todolists",
   initialState: [] as DomainTodolists[],
   reducers: (create) => ({
+    fetchTodolistsTC: create.asyncThunk(
+      async (_arg, { rejectWithValue }) => {
+        try {
+          const res = await todolistsApi.getTodolists()
+          return { todolists: res.data }
+        } catch (error) {
+          return rejectWithValue(error)
+        }
+      },
+      {
+        fulfilled: (_state, action) => action.payload.todolists.map((todolist) => ({ ...todolist, filter: "all" })),
+        rejected: (_state, action: any) => {
+          console.log(action.payload.message)
+        },
+      },
+    ),
     changeTodolistFilterAC: create.reducer<{ id: string; filter: FilterValues }>((state, action) => {
       const index = state.findIndex((tl) => tl.id === action.payload.id)
       if (index !== -1) {
@@ -15,15 +32,15 @@ export const todolistsSlice = createSlice({
   }),
   extraReducers: (builder) => {
     builder
-      .addCase(fetchTodolistsTC.fulfilled, (_state, action) => {
+      /*.addCase(fetchTodolistsTC.fulfilled, (_state, action) => {
         return action.payload.todolists.map((todolist) => {
           return { ...todolist, filter: "all" }
         })
       })
       .addCase(fetchTodolistsTC.rejected, (_state, action: any) => {
         console.log(action.payload.message)
-      })
-      .addCase(createTodolistTC.fulfilled, (state, {payload}) => {
+      })*/
+      .addCase(createTodolistTC.fulfilled, (state, { payload }) => {
         state.push({ ...payload.todolist, filter: "all" })
       })
       .addCase(createTodolistTC.rejected, (_state, action: any) => {
@@ -49,11 +66,11 @@ export const todolistsSlice = createSlice({
       })
   },
   selectors: {
-    selectTodolists: (state) => state
-  }
+    selectTodolists: (state) => state,
+  },
 })
 
-export const fetchTodolistsTC = createAsyncThunk(
+/*export const fetchTodolistsTC = createAsyncThunk(
   `${todolistsSlice.name}/fetchTodolistsTC`,
   async (_, { rejectWithValue }) => {
     try {
@@ -63,7 +80,7 @@ export const fetchTodolistsTC = createAsyncThunk(
       return rejectWithValue(error)
     }
   },
-)
+)*/
 
 export const createTodolistTC = createAsyncThunk(
   `${todolistsSlice.name}/createTodolistTC`,
@@ -71,7 +88,7 @@ export const createTodolistTC = createAsyncThunk(
     try {
       const res = await todolistsApi.createTodolist(title)
       const newTodolist = res.data.data.item
-      return {todolist: newTodolist}
+      return { todolist: newTodolist }
     } catch (error) {
       return rejectWithValue(error)
     }
@@ -108,9 +125,9 @@ export const deleteTodolistTC = createAsyncThunk(
   },
 )
 
-export const { changeTodolistFilterAC } = todolistsSlice.actions
+export const { changeTodolistFilterAC, fetchTodolistsTC } = todolistsSlice.actions
 export const todolistsReducer = todolistsSlice.reducer
-export const {selectTodolists} = todolistsSlice.selectors
+export const { selectTodolists } = todolistsSlice.selectors
 
 export type DomainTodolists = Todolist & {
   filter: FilterValues
