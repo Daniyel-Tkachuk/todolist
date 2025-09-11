@@ -2,7 +2,7 @@ import { createTodolistTC, deleteTodolistTC } from "./todolistsSlice.ts"
 import { createAppSlice } from "@/common/utils"
 import { tasksApi } from "@/features/todolists/api/tasksApi.ts"
 import { DomainTask, UpdateTaskModel } from "@/features/todolists/api/tasksApi.types.ts"
-import { TaskStatus } from "@/common/enums"
+import { changeAppStatusAC } from "@/app/appSlice.ts"
 
 
 export const tasksSlice = createAppSlice({
@@ -28,12 +28,16 @@ export const tasksSlice = createAppSlice({
       },
     ),
     createTaskTC: create.asyncThunk(
-      async (args: { todolistId: string; title: string }, { rejectWithValue }) => {
+      async (args: { todolistId: string; title: string }, { rejectWithValue, dispatch }) => {
         try {
+          dispatch(changeAppStatusAC({status: "loading"}))
           const res = await tasksApi.createTask(args)
           return res.data.data.item
         } catch (error) {
+          dispatch(changeAppStatusAC({status: "failed"}))
           return rejectWithValue(null)
+        } finally {
+          dispatch(changeAppStatusAC({status: "idle"}))
         }
       },
       {
@@ -100,14 +104,6 @@ export const tasksSlice = createAppSlice({
         rejected: (_state, action: any) => {
           console.log(action.payload.message)
         },
-      },
-    ),
-    changeTaskStatusAC: create.reducer<{ todolistId: string; taskId: string; isDone: boolean }>(
-      (state, { payload }) => {
-        const task = state[payload.todolistId].find((task) => task.id === payload.taskId)
-        if (task) {
-          task.status = payload.isDone ? TaskStatus.Completed : TaskStatus.New
-        }
       },
     ),
     changeTaskTitleAC: create.reducer<{ todolistId: string; taskId: string; title: string }>((state, { payload }) => {

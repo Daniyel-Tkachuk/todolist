@@ -2,18 +2,23 @@ import { createAsyncThunk } from "@reduxjs/toolkit"
 import { Todolist } from "@/features/todolists/api/todolistsApi.types.ts"
 import { todolistsApi } from "@/features/todolists/api/todolistsApi.ts"
 import { createAppSlice } from "@/common/utils"
+import { changeAppStatusAC } from "@/app/appSlice.ts"
 
 export const todolistsSlice = createAppSlice({
   name: "todolists",
   initialState: [] as DomainTodolists[],
   reducers: (create) => ({
     fetchTodolistsTC: create.asyncThunk(
-      async (_arg, { rejectWithValue }) => {
+      async (_arg, { rejectWithValue, dispatch }) => {
         try {
+          dispatch(changeAppStatusAC({status: "loading"}))
           const res = await todolistsApi.getTodolists()
           return { todolists: res.data }
         } catch (error) {
+          dispatch(changeAppStatusAC({status: "failed"}))
           return rejectWithValue(error)
+        } finally {
+          dispatch(changeAppStatusAC({status: "idle"}))
         }
       },
       {
@@ -23,6 +28,25 @@ export const todolistsSlice = createAppSlice({
         },
       },
     ),
+    deleteTodolistTC: create.asyncThunk(async (todoId: string, {rejectWithValue, dispatch}) => {
+      try {
+        dispatch(changeAppStatusAC({status: "loading"}))
+        await todolistsApi.deleteTodolist(todoId)
+        return {todoId}
+      } catch (e) {
+        return rejectWithValue(null)
+      }
+    }, {
+      fulfilled: (state, action) => {
+        const index = state.findIndex(todolist => todolist.id === action.payload.todoId)
+        if (index !== -1) {
+          state.splice(index, 1)
+        }
+      },
+      rejected: (_state, action: any) => {
+        console.log(action.payload.message)
+      }
+    }),
     changeTodolistFilterAC: create.reducer<{ id: string; filter: FilterValues }>((state, action) => {
       const index = state.findIndex((tl) => tl.id === action.payload.id)
       if (index !== -1) {
