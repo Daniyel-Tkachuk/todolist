@@ -1,4 +1,3 @@
-import { createAsyncThunk } from "@reduxjs/toolkit"
 import { Todolist } from "@/features/todolists/api/todolistsApi.types.ts"
 import { todolistsApi } from "@/features/todolists/api/todolistsApi.ts"
 import { createAppSlice } from "@/common/utils"
@@ -69,6 +68,29 @@ export const todolistsSlice = createAppSlice({
         console.log(action.payload.message)
       }
     }),
+    changeTodolistTitleTC: create.asyncThunk(async (args: {id: string, title: string}, {rejectWithValue, dispatch}) => {
+      try {
+        dispatch(changeAppStatusAC({status: "loading"}))
+        await todolistsApi.changeTodolistTitle(args)
+        return args
+      } catch (e) {
+        dispatch(changeAppStatusAC({status: "failed"}))
+        return rejectWithValue(null)
+      } finally {
+        dispatch(changeAppStatusAC({status: "idle"}))
+      }
+    }, {
+      fulfilled: (state, action) => {
+        const {id, title} = action.payload
+        const index = state.findIndex(todolist => todolist.id === id)
+        if (index !== -1) {
+          state[index].title = title
+        }
+      },
+      rejected: (_state, action: any) => {
+        console.log(action.payload.message)
+      }
+    }),
     changeTodolistFilterAC: create.reducer<{ id: string; filter: FilterValues }>((state, action) => {
       const index = state.findIndex((tl) => tl.id === action.payload.id)
       if (index !== -1) {
@@ -76,22 +98,23 @@ export const todolistsSlice = createAppSlice({
       }
     }),
   }),
-  extraReducers: (builder) => {
+  // Памятка: санки для RTK
+ /* extraReducers: (builder) => {
     builder
-      /*.addCase(fetchTodolistsTC.fulfilled, (_state, action) => {
+      .addCase(fetchTodolistsTC.fulfilled, (_state, action) => {
         return action.payload.todolists.map((todolist) => {
           return { ...todolist, filter: "all" }
         })
       })
       .addCase(fetchTodolistsTC.rejected, (_state, action: any) => {
         console.log(action.payload.message)
-      })*/
-      /*.addCase(createTodolistTC.fulfilled, (state, { payload }) => {
+      })
+      .addCase(createTodolistTC.fulfilled, (state, { payload }) => {
         state.push({ ...payload.todolist, filter: "all" })
       })
       .addCase(createTodolistTC.rejected, (_state, action: any) => {
         console.log(action.payload.message)
-      })*/
+      })
       .addCase(changeTodolistTitleTC.fulfilled, (state, action) => {
         const index = state.findIndex((todolist) => todolist.id === action.payload.id)
         if (index !== -1) {
@@ -101,7 +124,7 @@ export const todolistsSlice = createAppSlice({
       .addCase(changeTodolistTitleTC.rejected, (_state, action: any) => {
         console.log(action.payload.message!)
       })
-      /*.addCase(deleteTodolistTC.fulfilled, (state, action) => {
+      .addCase(deleteTodolistTC.fulfilled, (state, action) => {
         const index = state.findIndex(({ id }) => id === action.payload.id)
         if (index !== -1) {
           state.splice(index, 1)
@@ -109,12 +132,15 @@ export const todolistsSlice = createAppSlice({
       })
       .addCase(deleteTodolistTC.rejected, (_state, action: any) => {
         console.log(action.payload.message)
-      })*/
-  },
+      })
+  },*/
   selectors: {
     selectTodolists: (state) => state,
   },
 })
+
+
+// Памятка: санки для RTK
 
 /*export const fetchTodolistsTC = createAsyncThunk(
   `${todolistsSlice.name}/fetchTodolistsTC`,
@@ -141,7 +167,7 @@ export const todolistsSlice = createAppSlice({
   },
 )*/
 
-export const changeTodolistTitleTC = createAsyncThunk(
+/*export const changeTodolistTitleTC = createAsyncThunk(
   `${todolistsSlice.name}/changeTodolistTitleTC`,
   async (
     args: {
@@ -157,7 +183,7 @@ export const changeTodolistTitleTC = createAsyncThunk(
       return rejectWithValue(error)
     }
   },
-)
+)*/
 
 /*export const deleteTodolistTC = createAsyncThunk(
   `${todolistsSlice.name}/deleteTodolistTC`,
@@ -171,7 +197,13 @@ export const changeTodolistTitleTC = createAsyncThunk(
   },
 )*/
 
-export const { changeTodolistFilterAC, fetchTodolistsTC, deleteTodolistTC, createTodolistTC } = todolistsSlice.actions
+export const {
+  changeTodolistFilterAC,
+  fetchTodolistsTC,
+  deleteTodolistTC,
+  createTodolistTC,
+  changeTodolistTitleTC
+} = todolistsSlice.actions
 export const todolistsReducer = todolistsSlice.reducer
 export const { selectTodolists } = todolistsSlice.selectors
 
