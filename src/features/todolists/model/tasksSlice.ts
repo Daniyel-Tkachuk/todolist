@@ -119,7 +119,7 @@ export const tasksSlice = createAppSlice({
         state[payload.todolist.id] = []
       })
       .addCase(deleteTodolistTC.fulfilled, (state, { payload }) => {
-        delete state[payload.id]
+        delete state[payload.todoId]
       })
   },
   selectors: {
