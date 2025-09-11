@@ -34,7 +34,10 @@ export const todolistsSlice = createAppSlice({
         await todolistsApi.deleteTodolist(todoId)
         return {todoId}
       } catch (e) {
+        dispatch(changeAppStatusAC({status: "failed"}))
         return rejectWithValue(null)
+      } finally {
+        dispatch(changeAppStatusAC({status: "idle"}))
       }
     }, {
       fulfilled: (state, action) => {
@@ -79,7 +82,7 @@ export const todolistsSlice = createAppSlice({
       .addCase(changeTodolistTitleTC.rejected, (_state, action: any) => {
         console.log(action.payload.message!)
       })
-      .addCase(deleteTodolistTC.fulfilled, (state, action) => {
+      /*.addCase(deleteTodolistTC.fulfilled, (state, action) => {
         const index = state.findIndex(({ id }) => id === action.payload.id)
         if (index !== -1) {
           state.splice(index, 1)
@@ -87,7 +90,7 @@ export const todolistsSlice = createAppSlice({
       })
       .addCase(deleteTodolistTC.rejected, (_state, action: any) => {
         console.log(action.payload.message)
-      })
+      })*/
   },
   selectors: {
     selectTodolists: (state) => state,
@@ -137,7 +140,7 @@ export const changeTodolistTitleTC = createAsyncThunk(
   },
 )
 
-export const deleteTodolistTC = createAsyncThunk(
+/*export const deleteTodolistTC = createAsyncThunk(
   `${todolistsSlice.name}/deleteTodolistTC`,
   async (id: string, { rejectWithValue }) => {
     try {
@@ -147,9 +150,9 @@ export const deleteTodolistTC = createAsyncThunk(
       return rejectWithValue(error)
     }
   },
-)
+)*/
 
-export const { changeTodolistFilterAC, fetchTodolistsTC } = todolistsSlice.actions
+export const { changeTodolistFilterAC, fetchTodolistsTC, deleteTodolistTC } = todolistsSlice.actions
 export const todolistsReducer = todolistsSlice.reducer
 export const { selectTodolists } = todolistsSlice.selectors
 
