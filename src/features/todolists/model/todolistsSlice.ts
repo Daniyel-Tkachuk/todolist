@@ -98,7 +98,7 @@ export const todolistsSlice = createAppSlice({
       }
     }),
   }),
-  // Памятка: санки для RTK
+  // Памятка: **** санки для RTK *****
  /* extraReducers: (builder) => {
     builder
       .addCase(fetchTodolistsTC.fulfilled, (_state, action) => {
@@ -140,8 +140,7 @@ export const todolistsSlice = createAppSlice({
 })
 
 
-// Памятка: санки для RTK
-
+// ******* Памятка: санки для RTK *******
 /*export const fetchTodolistsTC = createAsyncThunk(
   `${todolistsSlice.name}/fetchTodolistsTC`,
   async (_, { rejectWithValue }) => {
@@ -153,7 +152,6 @@ export const todolistsSlice = createAppSlice({
     }
   },
 )*/
-
 /*export const createTodolistTC = createAsyncThunk(
   `${todolistsSlice.name}/createTodolistTC`,
   async (title: string, { rejectWithValue }) => {
@@ -166,7 +164,6 @@ export const todolistsSlice = createAppSlice({
     }
   },
 )*/
-
 /*export const changeTodolistTitleTC = createAsyncThunk(
   `${todolistsSlice.name}/changeTodolistTitleTC`,
   async (
@@ -184,7 +181,6 @@ export const todolistsSlice = createAppSlice({
     }
   },
 )*/
-
 /*export const deleteTodolistTC = createAsyncThunk(
   `${todolistsSlice.name}/deleteTodolistTC`,
   async (id: string, { rejectWithValue }) => {
