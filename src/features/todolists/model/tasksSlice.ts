@@ -10,12 +10,16 @@ export const tasksSlice = createAppSlice({
   initialState: {} as TasksState,
   reducers: (create) => ({
     fetchTasksTC: create.asyncThunk(
-      async (todolistId: string, { rejectWithValue }) => {
+      async (todolistId: string, { rejectWithValue, dispatch }) => {
         try {
+          dispatch(changeAppStatusAC({status: "loading"}))
           const res = await tasksApi.getTasks(todolistId)
           return { todolistId, tasks: res.data.items }
         } catch (error) {
+          dispatch(changeAppStatusAC({status: "failed"}))
           return rejectWithValue(null)
+        } finally {
+          dispatch(changeAppStatusAC({status: "idle"}))
         }
       },
       {
@@ -51,12 +55,16 @@ export const tasksSlice = createAppSlice({
       },
     ),
     deleteTaskTC: create.asyncThunk(
-      async (args: { todolistId: string; taskId: string }, { rejectWithValue }) => {
+      async (args: { todolistId: string; taskId: string }, { rejectWithValue, dispatch }) => {
         try {
+          dispatch(changeAppStatusAC({status: "loading"}))
           await tasksApi.deleteTask(args)
           return args
         } catch (error) {
+          dispatch(changeAppStatusAC({status: "failed"}))
           return rejectWithValue(null)
+        } finally {
+          dispatch(changeAppStatusAC({status: "idle"}))
         }
       },
       {
@@ -72,7 +80,7 @@ export const tasksSlice = createAppSlice({
         },
       },
     ),
-    updateTaskTC: create.asyncThunk(async (args: {todolistId: string, taskId: string, model: Partial<UpdateTaskModel>}, {getState, rejectWithValue}) => {
+    updateTaskTC: create.asyncThunk(async (args: {todolistId: string, taskId: string, model: Partial<UpdateTaskModel>}, {getState, dispatch, rejectWithValue}) => {
       try {
         const state = (getState() as RootState).tasks
         const task = state[args.todolistId].find(task => task.id === args.taskId)
@@ -86,10 +94,14 @@ export const tasksSlice = createAppSlice({
           ...args.model
         }
 
+        dispatch(changeAppStatusAC({status: "loading"}))
         const res = await tasksApi.updateTask({...args, model: domainModel})
         return res.data.data.item
       } catch (e) {
+        dispatch(changeAppStatusAC({status: "failed"}))
         return rejectWithValue(null)
+      } finally {
+        dispatch(changeAppStatusAC({status: "idle"}))
       }
     }, {
       fulfilled: (state, action) => {
