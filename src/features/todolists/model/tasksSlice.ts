@@ -4,7 +4,6 @@ import { tasksApi } from "@/features/todolists/api/tasksApi.ts"
 import { DomainTask, UpdateTaskModel } from "@/features/todolists/api/tasksApi.types.ts"
 import { changeAppStatusAC } from "@/app/appSlice.ts"
 
-
 export const tasksSlice = createAppSlice({
   name: "tasks",
   initialState: {} as TasksState,
@@ -30,14 +29,14 @@ export const tasksSlice = createAppSlice({
     createTaskTC: create.asyncThunk(
       async (args: { todolistId: string; title: string }, { rejectWithValue, dispatch }) => {
         try {
-          dispatch(changeAppStatusAC({status: "loading"}))
+          dispatch(changeAppStatusAC({ status: "loading" }))
           const res = await tasksApi.createTask(args)
           return res.data.data.item
         } catch (error) {
-          dispatch(changeAppStatusAC({status: "failed"}))
+          dispatch(changeAppStatusAC({ status: "failed" }))
           return rejectWithValue(null)
         } finally {
-          dispatch(changeAppStatusAC({status: "idle"}))
+          dispatch(changeAppStatusAC({ status: "idle" }))
         }
       },
       {
@@ -73,10 +72,7 @@ export const tasksSlice = createAppSlice({
       },
     ),
     changeTaskStatusTC: create.asyncThunk(
-      async (
-        task: DomainTask,
-        { rejectWithValue },
-      ) => {
+      async (task: DomainTask, { rejectWithValue }) => {
         try {
           const model: UpdateTaskModel = {
             status: task.status,
@@ -87,7 +83,7 @@ export const tasksSlice = createAppSlice({
             priority: task.priority,
           }
 
-          const res = await tasksApi.updateTask({taskId: task.id, todolistId: task.todoListId, model})
+          const res = await tasksApi.updateTask({ taskId: task.id, todolistId: task.todoListId, model })
           return res.data.data.item
         } catch (error) {
           return rejectWithValue(null)
@@ -95,8 +91,8 @@ export const tasksSlice = createAppSlice({
       },
       {
         fulfilled: (state, action) => {
-          const {id, todoListId, status} = action.payload
-          const task = state[todoListId].find(task => task.id === id)
+          const { id, todoListId, status } = action.payload
+          const task = state[todoListId].find((task) => task.id === id)
           if (task) {
             task.status = status
           }
@@ -106,12 +102,37 @@ export const tasksSlice = createAppSlice({
         },
       },
     ),
-    changeTaskTitleAC: create.reducer<{ todolistId: string; taskId: string; title: string }>((state, { payload }) => {
-      const task = state[payload.todolistId].find((task) => task.id === payload.taskId)
-      if (task) {
-        task.title = payload.title
-      }
-    }),
+    changeTaskTitleTC: create.asyncThunk(
+      async (task: DomainTask, { rejectWithValue }) => {
+        try {
+          const model: UpdateTaskModel = {
+            status: task.status,
+            title: task.title,
+            deadline: task.deadline,
+            priority: task.priority,
+            description: task.description,
+            startDate: task.startDate,
+          }
+
+          const res = await tasksApi.updateTask({ todolistId: task.todoListId, taskId: task.id, model })
+          return res.data.data.item
+        } catch (e) {
+          return rejectWithValue(null)
+        }
+      },
+      {
+        fulfilled: (state, action) => {
+          const { id, todoListId, title } = action.payload
+          const task = state[todoListId].find((task) => task.id === id)
+          if (task) {
+            task.title = title
+          }
+        },
+        rejected: (_state, action: any) => {
+          console.log(action.payload.message)
+        }
+      },
+    ),
   }),
   extraReducers: (builder) => {
     builder
@@ -127,7 +148,7 @@ export const tasksSlice = createAppSlice({
   },
 })
 
-export const { fetchTasksTC, deleteTaskTC, createTaskTC, changeTaskStatusTC, changeTaskTitleAC } = tasksSlice.actions
+export const { fetchTasksTC, deleteTaskTC, createTaskTC, changeTaskStatusTC, changeTaskTitleTC } = tasksSlice.actions
 export const { selectTasks } = tasksSlice.selectors
 export const tasksReducer = tasksSlice.reducer
 
