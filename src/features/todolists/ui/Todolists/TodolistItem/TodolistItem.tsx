@@ -17,6 +17,7 @@ export const TodolistItem = ({ todolist }: Props) => {
     dispatch(createTaskTC({ todolistId: todolist.id, title }))
   }
 
+  //TODO: можно использовать атрибут inert чтобы задизейблить весь тудулист
   return (
     <div>
       <TodolistTitle todolist={todolist} />

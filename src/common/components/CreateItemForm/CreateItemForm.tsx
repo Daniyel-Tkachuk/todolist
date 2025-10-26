@@ -8,7 +8,7 @@ type Props = {
   onCreateItem: (title: string) => void
 }
 
-export const CreateItemForm = ({ isDisabled, onCreateItem }: Props) => {
+export const CreateItemForm = ({ isDisabled = false, onCreateItem }: Props) => {
   const [title, setTitle] = useState("")
   const [error, setError] = useState<string | null>(null)
 
