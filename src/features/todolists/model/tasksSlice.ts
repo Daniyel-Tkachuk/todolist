@@ -12,14 +12,14 @@ export const tasksSlice = createAppSlice({
     fetchTasksTC: create.asyncThunk(
       async (todolistId: string, { rejectWithValue, dispatch }) => {
         try {
-          dispatch(changeAppStatusAC({status: "loading"}))
+          dispatch(changeAppStatusAC({ status: "loading" }))
           const res = await tasksApi.getTasks(todolistId)
           return { todolistId, tasks: res.data.items }
         } catch (error) {
-          dispatch(changeAppStatusAC({status: "failed"}))
+          dispatch(changeAppStatusAC({ status: "failed" }))
           return rejectWithValue(null)
         } finally {
-          dispatch(changeAppStatusAC({status: "idle"}))
+          dispatch(changeAppStatusAC({ status: "idle" }))
         }
       },
       {
@@ -57,14 +57,14 @@ export const tasksSlice = createAppSlice({
     deleteTaskTC: create.asyncThunk(
       async (args: { todolistId: string; taskId: string }, { rejectWithValue, dispatch }) => {
         try {
-          dispatch(changeAppStatusAC({status: "loading"}))
+          dispatch(changeAppStatusAC({ status: "loading" }))
           await tasksApi.deleteTask(args)
           return args
         } catch (error) {
-          dispatch(changeAppStatusAC({status: "failed"}))
+          dispatch(changeAppStatusAC({ status: "failed" }))
           return rejectWithValue(null)
         } finally {
-          dispatch(changeAppStatusAC({status: "idle"}))
+          dispatch(changeAppStatusAC({ status: "idle" }))
         }
       },
       {
@@ -80,42 +80,52 @@ export const tasksSlice = createAppSlice({
         },
       },
     ),
-    updateTaskTC: create.asyncThunk(async (args: {todolistId: string, taskId: string, model: Partial<UpdateTaskModel>}, {getState, dispatch, rejectWithValue}) => {
-      try {
-        const state = (getState() as RootState).tasks
-        const task = state[args.todolistId].find(task => task.id === args.taskId)
+    updateTaskTC: create.asyncThunk(
+      async (
+        args: {
+          todolistId: string
+          taskId: string
+          model: Partial<UpdateTaskModel>
+        },
+        { getState, dispatch, rejectWithValue },
+      ) => {
+        try {
+          const state = (getState() as RootState).tasks
+          const task = state[args.todolistId].find((task) => task.id === args.taskId)
 
-        if(!task) {
-          return rejectWithValue("Task not found")
-        }
+          if (!task) {
+            return rejectWithValue("Task not found")
+          }
 
-        const domainModel: UpdateTaskModel = {
-          ...task,
-          ...args.model
-        }
+          const domainModel: UpdateTaskModel = {
+            ...task,
+            ...args.model,
+          }
 
-        dispatch(changeAppStatusAC({status: "loading"}))
-        const res = await tasksApi.updateTask({...args, model: domainModel})
-        return res.data.data.item
-      } catch (e) {
-        dispatch(changeAppStatusAC({status: "failed"}))
-        return rejectWithValue(null)
-      } finally {
-        dispatch(changeAppStatusAC({status: "idle"}))
-      }
-    }, {
-      fulfilled: (state, action) => {
-        const updatedTask = action.payload
-        const tasks = state[updatedTask.todoListId]
-        const index = tasks.findIndex(task => task.id === updatedTask.id)
-        if (index !== -1) {
-          tasks[index] = updatedTask
+          dispatch(changeAppStatusAC({ status: "loading" }))
+          const res = await tasksApi.updateTask({ ...args, model: domainModel })
+          return res.data.data.item
+        } catch (e) {
+          dispatch(changeAppStatusAC({ status: "failed" }))
+          return rejectWithValue(null)
+        } finally {
+          dispatch(changeAppStatusAC({ status: "idle" }))
         }
       },
-      rejected: (_state, action: any) => {
-        console.log(action.payload.message)
-      }
-    }),
+      {
+        fulfilled: (state, action) => {
+          const updatedTask = action.payload
+          const tasks = state[updatedTask.todoListId]
+          const index = tasks.findIndex((task) => task.id === updatedTask.id)
+          if (index !== -1) {
+            tasks[index] = updatedTask
+          }
+        },
+        rejected: (_state, action: any) => {
+          console.log(action.payload.message)
+        },
+      },
+    ),
   }),
   /*changeTaskStatusTC: create.asyncThunk(
       async (task: DomainTask, { rejectWithValue }) => {
