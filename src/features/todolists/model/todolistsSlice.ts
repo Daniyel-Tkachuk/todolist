@@ -41,6 +41,7 @@ export const todolistsSlice = createAppSlice({
           return { todoId }
         } catch (e) {
           dispatch(changeAppStatusAC({ status: "failed" }))
+          dispatch(changeTodolistStatusAC({id: todoId, entityStatus: "failed" }))
           return rejectWithValue(null)
         } finally {
           dispatch(changeAppStatusAC({ status: "idle" }))
