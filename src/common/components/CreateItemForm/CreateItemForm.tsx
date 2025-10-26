@@ -4,10 +4,11 @@ import AddBoxIcon from "@mui/icons-material/AddBox"
 import IconButton from "@mui/material/IconButton"
 
 type Props = {
+  isDisabled?: boolean
   onCreateItem: (title: string) => void
 }
 
-export const CreateItemForm = ({ onCreateItem }: Props) => {
+export const CreateItemForm = ({ isDisabled, onCreateItem }: Props) => {
   const [title, setTitle] = useState("")
   const [error, setError] = useState<string | null>(null)
 
@@ -41,10 +42,11 @@ export const CreateItemForm = ({ onCreateItem }: Props) => {
         size={"small"}
         error={!!error}
         helperText={error}
+        disabled={isDisabled}
         onChange={changeTitleHandler}
         onKeyDown={createItemOnEnterHandler}
       />
-      <IconButton onClick={createItemHandler} color={"primary"}>
+      <IconButton onClick={createItemHandler} color={"primary"} disabled={isDisabled}>
         <AddBoxIcon />
       </IconButton>
     </div>
