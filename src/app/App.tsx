@@ -1,28 +1,24 @@
-import "./App.css"
-import { Main } from "@/app/Main"
-import { Header } from "@/common/components/Header/Header"
-import { useAppSelector } from "@/common/hooks"
-import { getTheme } from "@/common/theme"
-import CssBaseline from "@mui/material/CssBaseline"
-import { ThemeProvider } from "@mui/material/styles"
-import { selectAppError, selectThemeMode } from "@/app/appSlice.ts"
-import { ErrorSnackbar } from "@/common/components"
+import styles from './App.module.css'
+import {ThemeProvider} from '@mui/material/styles'
+import CssBaseline from '@mui/material/CssBaseline'
+import {useAppSelector} from "@/common/hooks/useAppSelector.ts";
+import {Header} from "@/common/components/Header/Header.tsx";
+import {Main} from "@/app/Main.tsx";
+import {getTheme} from "@/common/theme/theme.ts";
+import {selectThemeMode} from "@/app/app-selectors.ts";
 
 
 export const App = () => {
   const themeMode = useAppSelector(selectThemeMode)
-  const error = useAppSelector(selectAppError)
-
   const theme = getTheme(themeMode)
 
   return (
-    <ThemeProvider theme={theme}>
-      <div className={"app"}>
-        <CssBaseline />
-        <Header />
-        <Main />
-        {error && <ErrorSnackbar/>}
-      </div>
-    </ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <div className={styles.app}>
+          <CssBaseline />
+          <Header/>
+          <Main/>
+        </div>
+      </ThemeProvider>
   )
 }
