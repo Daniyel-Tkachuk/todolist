@@ -7,6 +7,18 @@
   margin-right: 50px;
 }
 
-.activeButton {
+.activeFilter {
   background-color: #7a6dec;
+}
+
+.error {
+  border: red 1px solid;
+}
+
+.error-message {
+  color: red;
+}
+
+.is-Done {
+  opacity: .5;
 }
