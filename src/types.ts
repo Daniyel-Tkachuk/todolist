@@ -3,3 +3,7 @@ export type Task = {
 	title: string
 	isDone: boolean
 }
+
+export type TasksState = {
+	[key: string]: Task[]
+}

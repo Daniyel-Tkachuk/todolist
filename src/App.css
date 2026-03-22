@@ -7,6 +7,11 @@
   margin-right: 50px;
 }
 
+.container {
+  display: flex;
+  align-items: center;
+}
+
 .activeFilter {
   background-color: #7a6dec;
 }
