@@ -42,6 +42,10 @@ export const TodolistItem = (props: Props) => {
     changeTaskStatus(todolist.id, taskId, taskStatus)
   }
 
+  const createTaskHandler = (title: string) => {
+    createTask(todolist.id, title)
+  }
+
   const filteredTasks = tasks[todolist.id].filter(task => {
     if (todolist.filter === "active") return !task.isDone
     if (todolist.filter === "completed") return task.isDone
@@ -63,7 +67,7 @@ export const TodolistItem = (props: Props) => {
         <Button title="X" onClick={deleteTodolistHandler} />
       </div>
 
-      <AddItemForm todolistId={todolist.id} createTask={createTask} />
+      <AddItemForm onCreateItem={createTaskHandler} />
 
       {
         tasks[todolist.id].length === 0

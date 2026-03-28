@@ -2,34 +2,33 @@ import { Button } from "@/components/Button.tsx"
 import { type ChangeEvent, type KeyboardEvent, useState } from "react"
 
 type Props = {
-  todolistId: string
-  createTask: (todolistId: string, title: string) => void
+  onCreateItem: (title: string) => void
 }
 
 export const AddItemForm = (props: Props) => {
-  const {todolistId, createTask} = props
+  const {onCreateItem} = props
 
   const [taskTitle, setTaskTitle] = useState("")
   const [error, setError] = useState<string | null>(null)
 
-  const changeTaskTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setTaskTitle(e.currentTarget.value)
     setError(null)
   }
 
-  const createTaskHandler = () => {
+  const createItemHandler = () => {
     const trimmedTitle = taskTitle.trim()
     if (trimmedTitle !== "") {
-      createTask(todolistId, trimmedTitle)
+      onCreateItem(trimmedTitle)
     } else {
       setError("Title is required")
     }
     setTaskTitle("")
   }
 
-  const createTaskOnEnterHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+  const createItemOnEnterHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      createTaskHandler()
+      createItemHandler()
     }
   }
 
@@ -38,10 +37,10 @@ export const AddItemForm = (props: Props) => {
       <input
         value={taskTitle}
         className={error ? "error" : ""}
-        onChange={changeTaskTitleHandler}
-        onKeyDown={createTaskOnEnterHandler}
+        onChange={onChangeHandler}
+        onKeyDown={createItemOnEnterHandler}
       />
-      <Button title="+" onClick={createTaskHandler} />
+      <Button title="+" onClick={createItemHandler} />
       {error && <div className="error-message">{error}</div>}
     </div>
   )
