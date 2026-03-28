@@ -1,7 +1,8 @@
 import type { TasksState } from "../types.ts"
 import { Button } from "./Button.tsx"
 import type { FilterValues, Todolist } from "../App.tsx"
-import { type ChangeEvent, useState, type KeyboardEvent } from "react"
+import { type ChangeEvent } from "react"
+import { AddItemForm } from "@/components/AddItemForm.tsx"
 
 type Props = {
   todolist: Todolist
@@ -24,36 +25,12 @@ export const TodolistItem = (props: Props) => {
     changeTaskStatus
   } = props
 
-  const [taskTitle, setTaskTitle] = useState("")
-  const [error, setError] = useState<string | null>(null)
-
   const deleteTodolistHandler = () => {
     deleteTodolist(todolist.id)
   }
 
-  const changeTaskTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setTaskTitle(e.currentTarget.value)
-    setError(null)
-  }
-
   const changeFilterHandler = (filter: FilterValues) => {
     changeFilter(todolist.id, filter)
-  }
-
-  const createTaskHandler = () => {
-    const trimmedTitle = taskTitle.trim()
-    if (trimmedTitle !== "") {
-      createTask(todolist.id, trimmedTitle)
-    } else {
-      setError("Title is required")
-    }
-    setTaskTitle("")
-  }
-
-  const createTaskOnEnterHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      createTaskHandler()
-    }
   }
 
   const deleteTaskHandler = (taskId: string) => {
@@ -81,20 +58,13 @@ export const TodolistItem = (props: Props) => {
 
   return (
     <div>
-      <div className={'container'}>
+      <div className={"container"}>
         <h3>{todolist.title}</h3>
-        <Button title='X' onClick={deleteTodolistHandler}/>
+        <Button title="X" onClick={deleteTodolistHandler} />
       </div>
-      <div>
-        <input
-          value={taskTitle}
-          className={error ? "error" : ""}
-          onChange={changeTaskTitleHandler}
-          onKeyDown={createTaskOnEnterHandler}
-        />
-        <Button title="+" onClick={createTaskHandler} />
-        {error && <div className="error-message">{error}</div>}
-      </div>
+
+      <AddItemForm todolistId={todolist.id} createTask={createTask} />
+
       {
         tasks[todolist.id].length === 0
           ? <span>Your tasksList is empty</span>
