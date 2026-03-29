@@ -3,6 +3,7 @@ import { TodolistItem } from "./components/TodolistItem.tsx"
 import { TasksState } from "./types.ts"
 import { useState } from "react"
 import { v1 } from "uuid"
+import { AddItemForm } from "@/components/AddItemForm.tsx"
 
 export type Todolist = {
 	id: string
@@ -32,6 +33,16 @@ function App() {
     ],
   })
 
+  const createTodolist = (title: string) => {
+    const newTodolistId = v1()
+    const newTodolist: Todolist = {
+      id: newTodolistId,
+      title,
+      filter: "all"
+    }
+    setTodolists([newTodolist, ...todolists])
+    setTasks({...tasks, [newTodolistId]: []})
+  }
 
   const deleteTodolist = (todolistId: string) => {
     setTodolists((prevState) => prevState.filter(t => t.id !== todolistId))
@@ -62,6 +73,7 @@ function App() {
 
   return (
     <div className="app">
+      <AddItemForm onCreateItem={createTodolist}/>
 			{
 				todolists
 					.map(tl => (
