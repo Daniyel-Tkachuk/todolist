@@ -2,11 +2,11 @@ import { Button } from "@/components/Button.tsx"
 import { type ChangeEvent, type KeyboardEvent, useState } from "react"
 
 type Props = {
-  onCreateItem: (title: string) => void
+  addItem: (title: string) => void
 }
 
 export const AddItemForm = (props: Props) => {
-  const {onCreateItem} = props
+  const {addItem} = props
 
   const [taskTitle, setTaskTitle] = useState("")
   const [error, setError] = useState<string | null>(null)
@@ -19,7 +19,7 @@ export const AddItemForm = (props: Props) => {
   const createItemHandler = () => {
     const trimmedTitle = taskTitle.trim()
     if (trimmedTitle !== "") {
-      onCreateItem(trimmedTitle)
+      addItem(trimmedTitle)
     } else {
       setError("Title is required")
     }

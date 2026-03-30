@@ -3,6 +3,7 @@ import { Button } from "./Button.tsx"
 import type { FilterValues, Todolist } from "../App.tsx"
 import { type ChangeEvent } from "react"
 import { AddItemForm } from "@/components/AddItemForm.tsx"
+import { EditableSpan } from "@/components/EditableSpan.tsx"
 
 type Props = {
   todolist: Todolist
@@ -12,6 +13,8 @@ type Props = {
   createTask: (todolistId: string, title: string) => void
   changeFilter: (todolistId: string, filter: FilterValues) => void
   changeTaskStatus: (todolistId: string, taskId: string, isDone: boolean) => void
+  updateTaskTitle: (todolistId: string, taskId: string, title: string) => void
+  updateTodolistTitle: (todolistId: string, title: string) => void
 }
 
 export const TodolistItem = (props: Props) => {
@@ -22,7 +25,9 @@ export const TodolistItem = (props: Props) => {
     deleteTask,
     createTask,
     changeFilter,
-    changeTaskStatus
+    changeTaskStatus,
+    updateTaskTitle,
+    updateTodolistTitle,
   } = props
 
   const deleteTodolistHandler = () => {
@@ -46,6 +51,14 @@ export const TodolistItem = (props: Props) => {
     createTask(todolist.id, title)
   }
 
+  const updateTaskTitleHandler = (taskId: string, title: string) => {
+    updateTaskTitle(todolist.id, taskId, title)
+  }
+
+  const updateTodolistTitleHandler = (title: string) => {
+    updateTodolistTitle(todolist.id, title)
+  }
+
   const filteredTasks = tasks[todolist.id].filter(task => {
     if (todolist.filter === "active") return !task.isDone
     if (todolist.filter === "completed") return task.isDone
@@ -56,18 +69,23 @@ export const TodolistItem = (props: Props) => {
     <li key={task.id} className={task.isDone ? "is-Done" : ""}>
       <Button title="X" onClick={() => deleteTaskHandler(task.id)} />
       <input type="checkbox" checked={task.isDone} onChange={(e) => changeTaskStatusHandler(e, task.id)} />
-      <span>{task.title}</span>
+      <EditableSpan
+        title={task.title}
+        setTitle={(title: string) => updateTaskTitleHandler(task.id, title)}
+      />
     </li>
   ))
 
   return (
     <div>
       <div className={"container"}>
-        <h3>{todolist.title}</h3>
+        <h3>
+          <EditableSpan title={todolist.title} setTitle={updateTodolistTitleHandler}/>
+        </h3>
         <Button title="X" onClick={deleteTodolistHandler} />
       </div>
 
-      <AddItemForm onCreateItem={createTaskHandler} />
+      <AddItemForm addItem={createTaskHandler} />
 
       {
         tasks[todolist.id].length === 0
