@@ -1,9 +1,10 @@
 import type { TasksState } from "../types.ts"
-import { Button } from "./Button.tsx"
 import type { FilterValues, Todolist } from "../App.tsx"
 import { type ChangeEvent } from "react"
 import { AddItemForm } from "@/components/AddItemForm.tsx"
 import { EditableSpan } from "@/components/EditableSpan.tsx"
+import { Button, IconButton, ListItem, Checkbox, List } from "@mui/material"
+import DeleteIcon from "@mui/icons-material/Delete"
 
 type Props = {
   todolist: Todolist
@@ -27,7 +28,7 @@ export const TodolistItem = (props: Props) => {
     changeFilter,
     changeTaskStatus,
     updateTaskTitle,
-    updateTodolistTitle,
+    updateTodolistTitle
   } = props
 
   const deleteTodolistHandler = () => {
@@ -66,23 +67,27 @@ export const TodolistItem = (props: Props) => {
   })
 
   const mappedTask = filteredTasks.map((task) => (
-    <li key={task.id} className={task.isDone ? "is-Done" : ""}>
-      <Button title="X" onClick={() => deleteTaskHandler(task.id)} />
-      <input type="checkbox" checked={task.isDone} onChange={(e) => changeTaskStatusHandler(e, task.id)} />
+    <ListItem key={task.id} className={task.isDone ? "is-Done" : ""}>
+      <Checkbox checked={task.isDone} onChange={(e) => changeTaskStatusHandler(e, task.id)}/>
       <EditableSpan
         title={task.title}
         setTitle={(title: string) => updateTaskTitleHandler(task.id, title)}
       />
-    </li>
+      <IconButton aria-label="delete" onClick={() => deleteTaskHandler(task.id)}>
+        <DeleteIcon />
+      </IconButton>
+    </ListItem>
   ))
 
   return (
     <div>
       <div className={"container"}>
         <h3>
-          <EditableSpan title={todolist.title} setTitle={updateTodolistTitleHandler}/>
+          <EditableSpan title={todolist.title} setTitle={updateTodolistTitleHandler} />
+          <IconButton aria-label="delete" onClick={deleteTodolistHandler}>
+            <DeleteIcon />
+          </IconButton>
         </h3>
-        <Button title="X" onClick={deleteTodolistHandler} />
       </div>
 
       <AddItemForm addItem={createTaskHandler} />
@@ -90,24 +95,31 @@ export const TodolistItem = (props: Props) => {
       {
         tasks[todolist.id].length === 0
           ? <span>Your tasksList is empty</span>
-          : <ul>{mappedTask}</ul>
+          : <List style={{listStyle: 'none', margin: 0, padding: 0}}>{mappedTask}</List>
       }
+
       <div>
         <Button
-          title="All"
+          variant={`${todolist.filter === "all" ? "contained" : "outlined"}`}
+          color="primary"
           onClick={() => changeFilterHandler("all")}
-          className={todolist.filter === "all" ? "activeFilter" : ""}
-        />
+        >
+          All
+        </Button>
         <Button
-          title="Active"
-          className={todolist.filter === "active" ? "activeFilter" : ""}
+          variant={`${todolist.filter === "active" ? "contained" : "outlined"}`}
+          color="primary"
           onClick={() => changeFilterHandler("active")}
-        />
+        >
+          Active
+        </Button>
         <Button
-          title="Completed"
+          variant={`${todolist.filter === "completed" ? "contained" : "outlined"}`}
+          color="primary"
           onClick={() => changeFilterHandler("completed")}
-          className={todolist.filter === "completed" ? "activeFilter" : ""}
-        />
+        >
+          Completed
+        </Button>
       </div>
     </div>
   )

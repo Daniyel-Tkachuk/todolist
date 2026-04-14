@@ -1,12 +1,13 @@
-import { Button } from "@/components/Button.tsx"
+// import { Button } from "@/components/Button.tsx"
 import { type ChangeEvent, type KeyboardEvent, useState } from "react"
+import { Button, TextField } from "@mui/material"
 
 type Props = {
   addItem: (title: string) => void
 }
 
 export const AddItemForm = (props: Props) => {
-  const {addItem} = props
+  const { addItem } = props
 
   const [taskTitle, setTaskTitle] = useState("")
   const [error, setError] = useState<string | null>(null)
@@ -32,16 +33,34 @@ export const AddItemForm = (props: Props) => {
     }
   }
 
+  const buttonStyle = {
+    fontSize: '16px',
+    fontWeight: 'bold',
+    maxWidth: '50px',
+    maxHeight: '40px',
+    minWidth: '50px',
+    minHeight: '40px',
+  }
+
   return (
     <div>
-      <input
+      <TextField
+        error={!!error}
+        size="small"
+        variant='outlined'
+        label={error ? error : 'type smth. please'}
         value={taskTitle}
-        className={error ? "error" : ""}
         onChange={onChangeHandler}
         onKeyDown={createItemOnEnterHandler}
       />
-      <Button title="+" onClick={createItemHandler} />
-      {error && <div className="error-message">{error}</div>}
+      <Button
+        variant="contained"
+        sx={buttonStyle}
+        onClick={createItemHandler}
+      >
+        +
+      </Button>
+      {/*{error && <div className="error-message">{error}</div>}*/}
     </div>
   )
 }

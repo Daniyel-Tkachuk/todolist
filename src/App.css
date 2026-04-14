@@ -1,8 +1,9 @@
 .app {
-  padding: 30px;
-  display: flex;
+  /*padding: 30px;*/
+  /*display: flex;*/
 }
 
+/*
 .app > div {
   margin-right: 50px;
 }
@@ -26,4 +27,4 @@
 
 .is-Done {
   opacity: .5;
-}
+}*/
