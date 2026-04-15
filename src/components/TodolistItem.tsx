@@ -104,21 +104,18 @@ export const TodolistItem = (props: Props) => {
       <Box sx={filterButtonsBox}>
         <Button
           variant={`${todolist.filter === "all" ? "contained" : "outlined"}`}
-          color="primary"
           onClick={() => changeFilterHandler("all")}
         >
           All
         </Button>
         <Button
           variant={`${todolist.filter === "active" ? "contained" : "outlined"}`}
-          color="primary"
           onClick={() => changeFilterHandler("active")}
         >
           Active
         </Button>
         <Button
           variant={`${todolist.filter === "completed" ? "contained" : "outlined"}`}
-          color="primary"
           onClick={() => changeFilterHandler("completed")}
         >
           Completed

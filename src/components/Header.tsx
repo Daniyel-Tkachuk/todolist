@@ -5,9 +5,15 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { NavButton } from "@/components/NavButton.ts"
+import { Switch, useTheme } from "@mui/material"
 
+type Props = {
+  changeThemeMode: () => void
+}
 
-export const Header = () => {
+export const Header = ({changeThemeMode}: Props) => {
+  const theme = useTheme()
+
   return (
     <Box sx={{ flexGrow: 1, marginBottom: "100px" }}>
       <AppBar position="fixed">
@@ -27,7 +33,8 @@ export const Header = () => {
           <div>
             <NavButton>Sign in</NavButton>
             <NavButton>Sign up</NavButton>
-            <NavButton background={'dodgerblue'}>Faq</NavButton>
+            <NavButton background={theme.palette.primary.dark}>Faq</NavButton>
+            <Switch color={'default'} onChange={changeThemeMode} />
           </div>
         </Toolbar>
       </AppBar>

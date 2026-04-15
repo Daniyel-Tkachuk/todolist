@@ -5,7 +5,10 @@ import { useState } from "react"
 import { v1 } from "uuid"
 import { AddItemForm } from "@/components/AddItemForm.tsx"
 import { Header } from "@/components/Header.tsx"
-import { Container, Grid, Paper } from "@mui/material"
+import { Container, CssBaseline, Grid, Paper } from "@mui/material"
+import { createTheme, ThemeProvider } from "@mui/material/styles"
+
+type ThemeMode = "light" | "dark"
 
 export type Todolist = {
   id: string
@@ -34,6 +37,21 @@ function App() {
       { id: v1(), title: "GraphQL", isDone: false }
     ]
   })
+
+  const [themeMode, setThemeMode] = useState<ThemeMode>("light")
+
+  const theme = createTheme({
+    palette: {
+      mode:themeMode,
+      primary: {
+        main: '#ef6c00',
+      }
+    }
+  })
+
+  const changeThemeMode = () => {
+    setThemeMode(themeMode === 'light' ? 'dark' : 'light')
+  }
 
   const createTodolist = (title: string) => {
     const newTodolistId = v1()
@@ -86,34 +104,37 @@ function App() {
 
   return (
     <div className="app">
-      <Header />
-      <Container fixed maxWidth="xl">
-        <Grid container sx={{ mb: '30px' }}>
-          <AddItemForm addItem={createTodolist} />
-        </Grid>
-        <Grid container spacing={6}>
-          {
-            todolists
-              .map(tl => (
-                <Grid key={tl.id}>
-                  <Paper sx={{ p: '20px 20px 20px 20px'}} elevation={4}>
-                    <TodolistItem
-                      todolist={tl}
-                      tasks={tasks}
-                      deleteTask={deleteTask}
-                      createTask={createTask}
-                      changeFilter={changeFilter}
-                      changeTaskStatus={changeTaskStatus}
-                      deleteTodolist={deleteTodolist}
-                      updateTaskTitle={updateTaskTitle}
-                      updateTodolistTitle={updateTodolistTitle}
-                    />
-                  </Paper>
-                </Grid>
-              ))
-          }
-        </Grid>
-      </Container>
+      <ThemeProvider theme={theme}>
+        <CssBaseline/>
+        <Container fixed maxWidth="xl">
+          <Header changeThemeMode={changeThemeMode}/>
+          <Grid container sx={{ mb: '30px' }}>
+            <AddItemForm addItem={createTodolist} />
+          </Grid>
+          <Grid container spacing={6}>
+            {
+              todolists
+                .map(tl => (
+                  <Grid key={tl.id}>
+                    <Paper sx={{ p: '20px 20px 20px 20px'}} elevation={4}>
+                      <TodolistItem
+                        todolist={tl}
+                        tasks={tasks}
+                        deleteTask={deleteTask}
+                        createTask={createTask}
+                        changeFilter={changeFilter}
+                        changeTaskStatus={changeTaskStatus}
+                        deleteTodolist={deleteTodolist}
+                        updateTaskTitle={updateTaskTitle}
+                        updateTodolistTitle={updateTodolistTitle}
+                      />
+                    </Paper>
+                  </Grid>
+                ))
+            }
+          </Grid>
+        </Container>
+      </ThemeProvider>
     </div>
   )
 }
