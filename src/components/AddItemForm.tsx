@@ -43,7 +43,7 @@ export const AddItemForm = (props: Props) => {
   }
 
   return (
-    <div>
+    <div style={{margin: '10px 0 5px'}}>
       <TextField
         error={!!error}
         size="small"

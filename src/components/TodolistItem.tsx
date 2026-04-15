@@ -3,8 +3,9 @@ import type { FilterValues, Todolist } from "../App.tsx"
 import { type ChangeEvent } from "react"
 import { AddItemForm } from "@/components/AddItemForm.tsx"
 import { EditableSpan } from "@/components/EditableSpan.tsx"
-import { Button, IconButton, ListItem, Checkbox, List } from "@mui/material"
+import { Button, IconButton, ListItem, Checkbox, List, Box } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
+import { filterButtonsBox, getListItemSx } from "@/components/Todolist.styles.ts"
 
 type Props = {
   todolist: Todolist
@@ -67,12 +68,14 @@ export const TodolistItem = (props: Props) => {
   })
 
   const mappedTask = filteredTasks.map((task) => (
-    <ListItem key={task.id} className={task.isDone ? "is-Done" : ""}>
-      <Checkbox checked={task.isDone} onChange={(e) => changeTaskStatusHandler(e, task.id)}/>
-      <EditableSpan
-        title={task.title}
-        setTitle={(title: string) => updateTaskTitleHandler(task.id, title)}
-      />
+    <ListItem key={task.id} sx={getListItemSx(task.isDone)}>
+      <div>
+        <Checkbox checked={task.isDone} onChange={(e) => changeTaskStatusHandler(e, task.id)} />
+        <EditableSpan
+          title={task.title}
+          setTitle={(title: string) => updateTaskTitleHandler(task.id, title)}
+        />
+      </div>
       <IconButton aria-label="delete" onClick={() => deleteTaskHandler(task.id)}>
         <DeleteIcon />
       </IconButton>
@@ -95,10 +98,10 @@ export const TodolistItem = (props: Props) => {
       {
         tasks[todolist.id].length === 0
           ? <span>Your tasksList is empty</span>
-          : <List style={{listStyle: 'none', margin: 0, padding: 0}}>{mappedTask}</List>
+          : <List style={{ listStyle: "none", margin: 0, padding: 0 }}>{mappedTask}</List>
       }
 
-      <div>
+      <Box sx={filterButtonsBox}>
         <Button
           variant={`${todolist.filter === "all" ? "contained" : "outlined"}`}
           color="primary"
@@ -120,7 +123,7 @@ export const TodolistItem = (props: Props) => {
         >
           Completed
         </Button>
-      </div>
+      </Box>
     </div>
   )
 }

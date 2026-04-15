@@ -2,9 +2,9 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import { NavButton } from "@/components/NavButton.ts"
 
 
 export const Header = () => {
@@ -24,7 +24,11 @@ export const Header = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             News
           </Typography>
-          <Button color="inherit">Login</Button>
+          <div>
+            <NavButton>Sign in</NavButton>
+            <NavButton>Sign up</NavButton>
+            <NavButton background={'dodgerblue'}>Faq</NavButton>
+          </div>
         </Toolbar>
       </AppBar>
     </Box>

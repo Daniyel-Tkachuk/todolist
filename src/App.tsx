@@ -96,7 +96,7 @@ function App() {
             todolists
               .map(tl => (
                 <Grid key={tl.id}>
-                  <Paper sx={{ p: '20px 20px 20px 20px' }}>
+                  <Paper sx={{ p: '20px 20px 20px 20px'}} elevation={4}>
                     <TodolistItem
                       todolist={tl}
                       tasks={tasks}
