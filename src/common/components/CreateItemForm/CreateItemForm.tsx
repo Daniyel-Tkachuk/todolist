@@ -21,7 +21,6 @@ export const CreateItemForm = ({ onCreateItem }: Props) => {
     }
   }
 
-
   const changeTitleHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.currentTarget.value)
     setError(null)
