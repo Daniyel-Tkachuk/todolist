@@ -47,4 +47,4 @@ export type Task = {
   isDone: boolean
 }
 
-type TasksState = Record<string, Task[]>
+export type TasksState = Record<string, Task[]>
