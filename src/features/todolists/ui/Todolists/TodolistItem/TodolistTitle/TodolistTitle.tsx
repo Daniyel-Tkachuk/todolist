@@ -3,7 +3,7 @@ import IconButton from "@mui/material/IconButton";
 import {EditableSpan} from "@/common/components/EditableSpan/EditableSpan.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {changeTodolistTitleAC, deleteTodolistAC, Todolist} from "@/features/todolists/model/todolists-reducer.ts";
-import {useAppDispatch} from "@/common/hooks/useAppDispatch.ts";
+import {useAppDispatch} from "@/common/hooks";
 
 type Props = {
   todolist: Todolist

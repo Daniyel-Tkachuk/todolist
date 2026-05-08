@@ -5,8 +5,8 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ListItem from "@mui/material/ListItem";
 import {ChangeEvent} from "react";
-import {useAppDispatch} from "@/common/hooks/useAppDispatch.ts";
 import {getListItemSx} from "./TaskItem.styles.ts";
+import {useAppDispatch} from "@/common/hooks";
 
 type Props = {
   task: Task
