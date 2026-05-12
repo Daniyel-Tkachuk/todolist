@@ -1,10 +1,10 @@
-import {CreateItemForm} from '@/common/components/CreateItemForm/CreateItemForm.tsx'
-import {Todolist} from "@/features/todolists/model/todolists-reducer.ts";
-import {createTaskAC} from "@/features/todolists/model/tasks-reducer.ts";
-import {TodolistTitle} from "./TodolistTitle/TodolistTitle.tsx";
-import {Tasks} from "./Tasks/Tasks.tsx";
-import {FilterButtons} from "./FilterButtons/FilterButtons.tsx";
-import {useAppDispatch} from "@/common/hooks";
+import {CreateItemForm} from "@/common/components/CreateItemForm/CreateItemForm.tsx"
+import {Todolist} from "@/features/todolists/model/todolists-reducer.ts"
+import {createTaskAC} from "@/features/todolists/model/tasks-reducer.ts"
+import {TodolistTitle} from "./TodolistTitle/TodolistTitle.tsx"
+import {Tasks} from "./Tasks/Tasks.tsx"
+import {FilterButtons} from "./FilterButtons/FilterButtons.tsx"
+import {useAppDispatch} from "@/common/hooks"
 
 type Props = {
   todolist: Todolist
@@ -20,11 +20,11 @@ export const TodolistItem = ({todolist}: Props) => {
   }
 
   return (
-      <div>
-        <TodolistTitle todolist={todolist}/>
-        <CreateItemForm onCreateItem={createTask}/>
-        <Tasks todolist={todolist}/>
-        <FilterButtons todolist={todolist}/>
-      </div>
+    <div>
+      <TodolistTitle todolist={todolist} />
+      <CreateItemForm onCreateItem={createTask} />
+      <Tasks todolist={todolist} />
+      <FilterButtons todolist={todolist} />
+    </div>
   )
 }

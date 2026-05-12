@@ -1,12 +1,12 @@
-import {changeTaskStatusAC, changeTaskTitleAC, deleteTaskAC, Task} from "@/features/todolists/model/tasks-reducer.ts";
-import Checkbox from "@mui/material/Checkbox";
-import {EditableSpan} from "@/common/components/EditableSpan/EditableSpan.tsx";
-import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ListItem from "@mui/material/ListItem";
-import {ChangeEvent} from "react";
-import {getListItemSx} from "./TaskItem.styles.ts";
-import {useAppDispatch} from "@/common/hooks";
+import {changeTaskStatusAC, changeTaskTitleAC, deleteTaskAC, Task} from "@/features/todolists/model/tasks-reducer.ts"
+import Checkbox from "@mui/material/Checkbox"
+import {EditableSpan} from "@/common/components/EditableSpan/EditableSpan.tsx"
+import IconButton from "@mui/material/IconButton"
+import DeleteIcon from "@mui/icons-material/Delete"
+import ListItem from "@mui/material/ListItem"
+import {ChangeEvent} from "react"
+import {getListItemSx} from "./TaskItem.styles.ts"
+import {useAppDispatch} from "@/common/hooks"
 
 type Props = {
   task: Task
@@ -34,12 +34,12 @@ export const TaskItem = (props: Props) => {
   return (
     <ListItem key={task.id} sx={getListItemSx(task.isDone)}>
       <div>
-        <Checkbox checked={task.isDone} onChange={changeTaskStatusHandler}/>
+        <Checkbox checked={task.isDone} onChange={changeTaskStatusHandler} />
         <EditableSpan value={task.title} onChange={changeTaskTitleHandler} />
       </div>
       <IconButton onClick={deleteTaskHandler}>
         <DeleteIcon />
       </IconButton>
     </ListItem>
-  );
-};
+  )
+}

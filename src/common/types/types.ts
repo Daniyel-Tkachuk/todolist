@@ -1,5 +1,5 @@
 export type BaseResponse<T = {}> = {
-  data: T,
+  data: T
   fieldsErrors: FieldError[]
   messages: string[]
   resultCode: number
