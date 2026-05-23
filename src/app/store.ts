@@ -5,9 +5,9 @@ import {appReducer, appSlice} from "./app-slice.ts"
 
 // объединение reducer'ов с помощью combineReducers
 const rootReducer = combineReducers({
-  [appSlice.name]: appReducer,
-  [tasksSlice.name]: tasksReducer,
   [todolistsSlice.name]: todolistsReducer,
+  [tasksSlice.name]: tasksReducer,
+  [appSlice.name]: appReducer,
 })
 
 // создание store
