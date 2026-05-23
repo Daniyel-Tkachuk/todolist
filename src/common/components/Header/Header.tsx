@@ -6,7 +6,7 @@ import {NavButton} from "@/common/components/NavButton/NavButton.ts"
 import Switch from "@mui/material/Switch"
 import AppBar from "@mui/material/AppBar"
 import {selectThemeMode} from "@/app/app-selectors.ts"
-import {changeThemeModeAC} from "@/app/app-reducer.ts"
+import {changeThemeMode} from "@/app/app-slice.ts"
 import {useAppDispatch, useAppSelector} from "@/common/hooks"
 import {containerSx} from "@/common/styles"
 import {getTheme} from "@/common/theme"
@@ -19,7 +19,7 @@ export const Header = () => {
   const theme = getTheme(themeMode)
 
   const changeMode = () => {
-    dispatch(changeThemeModeAC({themeMode: themeMode === "light" ? "dark" : "light"}))
+    dispatch(changeThemeMode({themeMode: themeMode === "light" ? "dark" : "light"}))
   }
 
   return (

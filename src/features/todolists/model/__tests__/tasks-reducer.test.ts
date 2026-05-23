@@ -7,7 +7,7 @@ import {
   tasksReducer,
   TasksState,
 } from "../tasks-reducer.ts"
-import {createTodolistAC, deleteTodolistAC} from "../todolists-reducer.ts"
+import {createTodolist, deleteTodolist} from "../todolists-slice.ts"
 
 let startState: TasksState = {}
 
@@ -76,7 +76,7 @@ test("correct task should change its title", () => {
 })
 
 test("array should be created for new todolist", () => {
-  const endState = tasksReducer(startState, createTodolistAC("New todolist"))
+  const endState = tasksReducer(startState, createTodolist("New todolist"))
 
   const keys = Object.keys(endState)
   const newKey = keys.find((k) => k !== "todolistId1" && k !== "todolistId2")
@@ -89,7 +89,7 @@ test("array should be created for new todolist", () => {
 })
 
 test("property with todolistId should be deleted", () => {
-  const endState = tasksReducer(startState, deleteTodolistAC({id: "todolistId2"}))
+  const endState = tasksReducer(startState, deleteTodolist({id: "todolistId2"}))
 
   const keys = Object.keys(endState)
 

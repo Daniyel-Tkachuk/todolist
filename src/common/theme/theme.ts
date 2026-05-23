@@ -1,4 +1,4 @@
-import {ThemeMode} from "@/app/app-reducer.ts"
+import {ThemeMode} from "@/app/app-slice.ts"
 import {createTheme} from "@mui/material"
 
 export const getTheme = (themeMode: ThemeMode) =>

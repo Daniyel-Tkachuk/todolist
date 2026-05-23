@@ -1,4 +1,4 @@
-import {changeTodolistFilterAC, FilterValues, Todolist} from "@/features/todolists/model/todolists-reducer.ts"
+import {changeTodolistFilter, FilterValues, Todolist} from "@/features/todolists/model/todolists-slice.ts"
 import Button from "@mui/material/Button"
 import Box from "@mui/material/Box"
 import {useAppDispatch} from "@/common/hooks"
@@ -14,7 +14,7 @@ export const FilterButtons = ({todolist}: Props) => {
   const dispatch = useAppDispatch()
 
   const changeFilter = (filter: FilterValues) => {
-    dispatch(changeTodolistFilterAC({id, filter}))
+    dispatch(changeTodolistFilter({id, filter}))
   }
 
   return (
