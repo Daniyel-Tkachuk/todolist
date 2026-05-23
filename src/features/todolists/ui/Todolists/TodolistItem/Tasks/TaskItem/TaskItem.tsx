@@ -1,4 +1,4 @@
-import {changeTaskStatusAC, changeTaskTitleAC, deleteTaskAC, Task} from "@/features/todolists/model/tasks-reducer.ts"
+import {changeTaskStatus, changeTaskTitle, deleteTask, Task} from "@/features/todolists/model/tasks-slice.ts"
 import Checkbox from "@mui/material/Checkbox"
 import {EditableSpan} from "@/common/components/EditableSpan/EditableSpan.tsx"
 import IconButton from "@mui/material/IconButton"
@@ -19,16 +19,16 @@ export const TaskItem = (props: Props) => {
   const dispatch = useAppDispatch()
 
   const deleteTaskHandler = () => {
-    dispatch(deleteTaskAC({todolistId, taskId: task.id}))
+    dispatch(deleteTask({todolistId, taskId: task.id}))
   }
 
   const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const newStatusValue = e.currentTarget.checked
-    dispatch(changeTaskStatusAC({todolistId, taskId: task.id, isDone: newStatusValue}))
+    dispatch(changeTaskStatus({todolistId, taskId: task.id, isDone: newStatusValue}))
   }
 
   const changeTaskTitleHandler = (title: string) => {
-    dispatch(changeTaskTitleAC({todolistId, taskId: task.id, title}))
+    dispatch(changeTaskTitle({todolistId, taskId: task.id, title}))
   }
 
   return (

@@ -1,5 +1,5 @@
 import {combineReducers, configureStore} from "@reduxjs/toolkit"
-import {tasksReducer} from "@/features/todolists/model/tasks-reducer"
+import {tasksReducer} from "@/features/todolists/model/tasks-slice"
 import {todolistsReducer} from "@/features/todolists/model/todolists-slice"
 import {appReducer} from "./app-slice.ts"
 
