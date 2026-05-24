@@ -69,7 +69,7 @@ export const todolistsSlice = createSlice({
 
 export const fetchTodolistsTC = createAsyncThunk(
   `${todolistsSlice.name}/fetchTodolists`,
-  async (_arg, {rejectWithValue}) => {
+  async (_args, {rejectWithValue}) => {
     try {
       const response = await todolistsApi.getTodolists()
       return response.data
