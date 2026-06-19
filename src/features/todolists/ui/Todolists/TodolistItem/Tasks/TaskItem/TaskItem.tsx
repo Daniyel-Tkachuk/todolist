@@ -1,4 +1,4 @@
-import {changeTaskStatusTC, changeTaskTitle, deleteTaskTC} from "@/features/todolists/model/tasks-slice.ts"
+import {deleteTaskTC, updateTaskTC} from "@/features/todolists/model/tasks-slice.ts"
 import Checkbox from "@mui/material/Checkbox"
 import {EditableSpan} from "@/common/components/EditableSpan/EditableSpan.tsx"
 import IconButton from "@mui/material/IconButton"
@@ -26,12 +26,17 @@ export const TaskItem = (props: Props) => {
 
   const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const newStatusValue = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New
-    const domainTask = {...task, status: newStatusValue}
-    dispatch(changeTaskStatusTC(domainTask))
+    const model = {
+      status: newStatusValue,
+    }
+    dispatch(updateTaskTC({todolistId, taskId: task.id, model}))
   }
 
   const changeTaskTitleHandler = (title: string) => {
-    dispatch(changeTaskTitle({todolistId, taskId: task.id, title}))
+    const model = {
+      title,
+    }
+    dispatch(updateTaskTC({todolistId, taskId: task.id, model}))
   }
 
   const isTaskCompleted = task.status === TaskStatus.Completed

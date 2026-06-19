@@ -1,5 +1,5 @@
 import {instance} from "@/common/instance"
-import {DomainTask, GetTasksResponse} from "@/features/todolists/api/tasksApi.types"
+import {DomainTask, GetTasksResponse, type UpdateTaskModel} from "@/features/todolists/api/tasksApi.types"
 import {BaseResponse} from "@/common/types"
 
 export const tasksApi = {
@@ -12,9 +12,8 @@ export const tasksApi = {
   deleteTask({todolistId, taskId}: DeleteTaskArgs) {
     return instance.delete<BaseResponse>(`/todo-lists/${todolistId}/tasks/${taskId}`)
   },
-  updateTask(domainTask: DomainTask) {
-    const {todoListId, id: taskId} = domainTask
-    return instance.put<BaseResponse<{item: DomainTask}>>(`/todo-lists/${todoListId}/tasks/${taskId}`, domainTask)
+  updateTask({todolistId, taskId, domainModel}: UpdateTaskArgs) {
+    return instance.put<BaseResponse<{item: DomainTask}>>(`/todo-lists/${todolistId}/tasks/${taskId}`, domainModel)
   },
 }
 
@@ -26,4 +25,10 @@ type CreateTaskArgs = {
 type DeleteTaskArgs = {
   todolistId: string
   taskId: string
+}
+
+type UpdateTaskArgs = {
+  todolistId: string
+  taskId: string
+  domainModel: UpdateTaskModel
 }
