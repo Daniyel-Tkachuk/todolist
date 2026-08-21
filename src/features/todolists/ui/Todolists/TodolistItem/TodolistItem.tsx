@@ -1,28 +1,26 @@
-import {CreateItemForm} from "@/common/components/CreateItemForm/CreateItemForm.tsx"
-import {DomainTodolist} from "@/features/todolists/model/todolists-slice.ts"
-import {createTaskTC} from "@/features/todolists/model/tasks-slice.ts"
-import {TodolistTitle} from "./TodolistTitle/TodolistTitle.tsx"
-import {Tasks} from "./Tasks/Tasks.tsx"
-import {FilterButtons} from "./FilterButtons/FilterButtons.tsx"
-import {useAppDispatch} from "@/common/hooks"
+import { useAppDispatch } from "@/common/hooks"
+import { FilterButtons } from "./FilterButtons/FilterButtons"
+import { createTaskAC } from "@/features/todolists/model/tasks-reducer"
+import type { Todolist } from "@/features/todolists/model/todolists-reducer"
+import { Tasks } from "./Tasks/Tasks"
+import { TodolistTitle } from "./TodolistTitle/TodolistTitle"
+import { CreateItemForm } from "@/common/components/CreateItemForm/CreateItemForm"
 
 type Props = {
-  todolist: DomainTodolist
+  todolist: Todolist
 }
 
-export const TodolistItem = ({todolist}: Props) => {
-  const {id} = todolist
-
+export const TodolistItem = ({ todolist }: Props) => {
   const dispatch = useAppDispatch()
 
-  const createTaskHandler = (title: string) => {
-    dispatch(createTaskTC({todolistId: id, title}))
+  const createTask = (title: string) => {
+    dispatch(createTaskAC({ todolistId: todolist.id, title }))
   }
 
   return (
     <div>
       <TodolistTitle todolist={todolist} />
-      <CreateItemForm onCreateItem={createTaskHandler} />
+      <CreateItemForm onCreateItem={createTask} />
       <Tasks todolist={todolist} />
       <FilterButtons todolist={todolist} />
     </div>

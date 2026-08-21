@@ -1,30 +1,29 @@
-import Toolbar from "@mui/material/Toolbar"
+import { changeThemeModeAC } from "@/app/app-reducer"
+import { selectThemeMode } from "@/app/app-selectors"
+import { useAppDispatch, useAppSelector } from "@/common/hooks"
+import { containerSx } from "@/common/styles"
+import { getTheme } from "@/common/theme"
+import { NavButton } from "@/common/components/NavButton/NavButton"
+import MenuIcon from "@mui/icons-material/Menu"
+import AppBar from "@mui/material/AppBar"
 import Container from "@mui/material/Container"
 import IconButton from "@mui/material/IconButton"
-import MenuIcon from "@mui/icons-material/Menu"
-import {NavButton} from "@/common/components/NavButton/NavButton.ts"
 import Switch from "@mui/material/Switch"
-import AppBar from "@mui/material/AppBar"
-import {changeThemeMode, selectAppStatus, selectThemeMode} from "@/app/app-slice.ts"
-import {useAppDispatch, useAppSelector} from "@/common/hooks"
-import {containerSx} from "@/common/styles"
-import {getTheme} from "@/common/theme"
-import {LinearProgress} from "@mui/material"
+import Toolbar from "@mui/material/Toolbar"
 
 export const Header = () => {
   const themeMode = useAppSelector(selectThemeMode)
-  const appStatus = useAppSelector(selectAppStatus)
 
   const dispatch = useAppDispatch()
 
   const theme = getTheme(themeMode)
 
   const changeMode = () => {
-    dispatch(changeThemeMode({themeMode: themeMode === "light" ? "dark" : "light"}))
+    dispatch(changeThemeModeAC({ themeMode: themeMode === "light" ? "dark" : "light" }))
   }
 
   return (
-    <AppBar position="static" sx={{mb: "30px"}}>
+    <AppBar position="static" sx={{ mb: "30px" }}>
       <Toolbar>
         <Container maxWidth={"lg"} sx={containerSx}>
           <IconButton color="inherit">
@@ -38,7 +37,6 @@ export const Header = () => {
           </div>
         </Container>
       </Toolbar>
-      {appStatus === "loading" && <LinearProgress />}
     </AppBar>
   )
 }
