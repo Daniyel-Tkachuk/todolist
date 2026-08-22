@@ -1,5 +1,4 @@
-import {changeThemeMode} from "@/app/app-slice"
-import {selectThemeMode} from "@/app/app-selectors"
+import {changeThemeMode, selectThemeMode} from "@/app/app-slice"
 import {useAppDispatch, useAppSelector} from "@/common/hooks"
 import {containerSx} from "@/common/styles"
 import {getTheme} from "@/common/theme"

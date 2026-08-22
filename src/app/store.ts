@@ -1,18 +1,22 @@
-import {combineReducers, configureStore} from "@reduxjs/toolkit"
-import {appReducer} from "./app-slice"
-import {tasksReducer} from "@/features/todolists/model/tasks-slice"
-import {todolistsReducer} from "@/features/todolists/model/todolists-slice"
+import {configureStore} from "@reduxjs/toolkit"
+import {appReducer, appSlice} from "./app-slice"
+import {tasksReducer, tasksSlice} from "@/features/todolists/model/tasks-slice"
+import {todolistsReducer, todolistsSlice} from "@/features/todolists/model/todolists-slice"
 
 // объединение reducer'ов с помощью combineReducers
-const rootReducer = combineReducers({
-  tasks: tasksReducer,
-  todolists: todolistsReducer,
-  app: appReducer,
-})
+/*const rootReducer = combineReducers({
+  [appSlice.name]: appReducer,
+  [todolistsSlice.name]: todolistsReducer,
+  [tasksSlice.name]: tasksReducer,
+})*/
 
 // создание store
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: {
+    [appSlice.name]: appReducer,
+    [todolistsSlice.name]: todolistsReducer,
+    [tasksSlice.name]: tasksReducer,
+  },
 })
 
 // автоматическое определение типа всего объекта состояния
