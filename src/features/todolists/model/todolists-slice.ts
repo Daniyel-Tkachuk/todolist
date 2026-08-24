@@ -43,6 +43,18 @@ export const todolistsSlice = createSlice({
         const newTodolist: DomainTodolist = {...action.payload.todolist, filter: "all"}
         state.push(newTodolist)
       })
+      .addCase(createTodolistTC.rejected, (_state, action: any) => {
+        console.log(action.payload.message)
+      })
+      .addCase(deleteTodolistTC.fulfilled, (state, action) => {
+        const index = state.findIndex((tl) => tl.id === action.payload.id)
+        if (index !== -1) {
+          state.splice(index, 1)
+        }
+      })
+      .addCase(deleteTodolistTC.rejected, (_state, action: any) => {
+        console.log(action.payload.message)
+      })
   },
 })
 
@@ -78,6 +90,18 @@ export const createTodolistTC = createAsyncThunk(
     try {
       const res = await todolistsApi.createTodolist(args.title)
       return {todolist: res.data.data.item}
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+  },
+)
+
+export const deleteTodolistTC = createAsyncThunk(
+  `${todolistsSlice.name}/deleteTodolist`,
+  async (args: {id: string}, {rejectWithValue}) => {
+    try {
+      await todolistsApi.deleteTodolist(args.id)
+      return {id: args.id}
     } catch (error) {
       return rejectWithValue(error)
     }
