@@ -4,6 +4,9 @@ import {createTodolistAC, deleteTodolistAC, fetchTodolistsTC} from "./todolists-
 export const tasksSlice = createSlice({
   name: "tasks",
   initialState: {} as TasksState,
+  selectors: {
+    selectTasks: (state) => state,
+  },
   reducers: (create) => ({
     deleteTaskAC: create.reducer<{todolistId: string; taskId: string}>((state, action) => {
       const {taskId, todolistId} = action.payload
@@ -56,6 +59,7 @@ export const tasksSlice = createSlice({
 
 export const tasksReducer = tasksSlice.reducer
 export const {deleteTaskAC, changeTaskStatusAC, changeTaskTitleAC, createTaskAC} = tasksSlice.actions
+export const {selectTasks} = tasksSlice.selectors
 
 export type Task = {
   id: string

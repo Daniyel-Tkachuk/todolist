@@ -5,13 +5,10 @@ import {todolistsApi} from "@/features/todolists/api/todolistsApi"
 export const todolistsSlice = createSlice({
   name: "todolists",
   initialState: [] as DomainTodolist[],
+  selectors: {
+    selectTodolists: (state) => state,
+  },
   reducers: (create) => ({
-    deleteTodolistAC: create.reducer<{id: string}>((state, action) => {
-      const index = state.findIndex((tl) => tl.id === action.payload.id)
-      if (index !== -1) {
-        state.splice(index, 1)
-      }
-    }),
     changeTodolistFilterAC: create.reducer<{id: string; filter: FilterValues}>((state, action) => {
       const {id, filter} = action.payload
       const index = state.findIndex((tl) => tl.id === id)
@@ -109,7 +106,8 @@ export const deleteTodolistTC = createAsyncThunk(
 )
 
 export const todolistsReducer = todolistsSlice.reducer
-export const {deleteTodolistAC, changeTodolistFilterAC} = todolistsSlice.actions
+export const {changeTodolistFilterAC} = todolistsSlice.actions
+export const {selectTodolists} = todolistsSlice.selectors
 
 export type DomainTodolist = Todolist & {
   filter: FilterValues
