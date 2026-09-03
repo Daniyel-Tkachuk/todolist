@@ -1,13 +1,38 @@
-import {createSlice, nanoid} from "@reduxjs/toolkit"
-import {createTodolistAC, deleteTodolistAC, fetchTodolistsTC} from "./todolists-slice"
+import {nanoid} from "@reduxjs/toolkit"
+import {createTodolistTC, deleteTodolistTC, fetchTodolistsTC} from "./todolists-slice"
+import {createAppSlice} from "@/common/utils"
+import {tasksApi} from "@/features/todolists/api/tasksApi"
+import type {DomainTask} from "@/features/todolists/api/tasksApi.types"
 
-export const tasksSlice = createSlice({
+export const tasksSlice = createAppSlice({
   name: "tasks",
   initialState: {} as TasksState,
   selectors: {
     selectTasks: (state) => state,
   },
   reducers: (create) => ({
+    // ✅ thunks
+    fetchTasksTC: create.asyncThunk(
+      async (todolistId: string, {rejectWithValue}) => {
+        try {
+          const result = await tasksApi.getTasks(todolistId)
+          return {todolistId, tasks: result.data.items}
+        } catch (error) {
+          return rejectWithValue(error)
+        }
+      },
+      {
+        fulfilled: (state, action) => {
+          const {todolistId, tasks} = action.payload
+          state[todolistId] = tasks
+        },
+        rejected: (_, action: any) => {
+          console.log(action.payload.message)
+        },
+      },
+    ),
+
+    // ✅ actions
     deleteTaskAC: create.reducer<{todolistId: string; taskId: string}>((state, action) => {
       const {taskId, todolistId} = action.payload
       const tasks = state[todolistId]
@@ -48,17 +73,17 @@ export const tasksSlice = createSlice({
       .addCase(fetchTodolistsTC.rejected, (_state, action: any) => {
         console.log(action.payload.message)
       })
-      .addCase(createTodolistAC, (state, action) => {
-        state[action.payload.id] = []
+      .addCase(createTodolistTC.fulfilled, (state, action) => {
+        state[action.payload.todolist.id] = []
       })
-      .addCase(deleteTodolistAC, (state, action) => {
+      .addCase(deleteTodolistTC.fulfilled, (state, action) => {
         delete state[action.payload.id]
       })
   },
 })
 
 export const tasksReducer = tasksSlice.reducer
-export const {deleteTaskAC, changeTaskStatusAC, changeTaskTitleAC, createTaskAC} = tasksSlice.actions
+export const {deleteTaskAC, changeTaskStatusAC, changeTaskTitleAC, createTaskAC, fetchTasksTC} = tasksSlice.actions
 export const {selectTasks} = tasksSlice.selectors
 
 export type Task = {
@@ -67,4 +92,4 @@ export type Task = {
   isDone: boolean
 }
 
-export type TasksState = Record<string, Task[]>
+export type TasksState = Record<string, DomainTask[]>
