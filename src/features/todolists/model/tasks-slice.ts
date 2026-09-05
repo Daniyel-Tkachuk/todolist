@@ -3,6 +3,7 @@ import {createTodolistTC, deleteTodolistTC, fetchTodolistsTC} from "./todolists-
 import {createAppSlice} from "@/common/utils"
 import {tasksApi} from "@/features/todolists/api/tasksApi"
 import type {DomainTask} from "@/features/todolists/api/tasksApi.types"
+import {TaskPriority, TaskStatus} from "@/common/enums"
 
 export const tasksSlice = createAppSlice({
   name: "tasks",
@@ -31,7 +32,25 @@ export const tasksSlice = createAppSlice({
         },
       },
     ),
-
+    createTaskTC: create.asyncThunk(
+      async (args: {todolistId: string; title: string}, {rejectWithValue}) => {
+        try {
+          const res = await tasksApi.createTask(args)
+          return {task: res.data.data.item}
+        } catch (error) {
+          return rejectWithValue(null)
+        }
+      },
+      {
+        fulfilled: (state, action) => {
+          const {task} = action.payload
+          state[task.todoListId].unshift(task)
+        },
+        rejected: (_, action: any) => {
+          console.log(action.payload.message)
+        },
+      },
+    ),
     // ✅ actions
     deleteTaskAC: create.reducer<{todolistId: string; taskId: string}>((state, action) => {
       const {taskId, todolistId} = action.payload
@@ -41,11 +60,11 @@ export const tasksSlice = createAppSlice({
         tasks.splice(index, 1)
       }
     }),
-    changeTaskStatusAC: create.reducer<{todolistId: string; taskId: string; isDone: boolean}>((state, action) => {
-      const {taskId, todolistId, isDone} = action.payload
+    changeTaskStatusAC: create.reducer<{todolistId: string; taskId: string; status: TaskStatus}>((state, action) => {
+      const {taskId, todolistId, status} = action.payload
       const task = state[todolistId].find((t) => t.id === taskId)
       if (task) {
-        task.isDone = isDone
+        task.status = status
       }
     }),
     changeTaskTitleAC: create.reducer<{todolistId: string; taskId: string; title: string}>((state, action) => {
@@ -57,7 +76,18 @@ export const tasksSlice = createAppSlice({
     }),
     createTaskAC: create.reducer<{todolistId: string; title: string}>((state, action) => {
       const {title, todolistId} = action.payload
-      const newTask: Task = {id: nanoid(), title, isDone: false}
+      const newTask: DomainTask = {
+        id: nanoid(),
+        title,
+        status: TaskStatus.New,
+        description: "",
+        priority: TaskPriority.Low,
+        startDate: "",
+        deadline: "",
+        todoListId: "",
+        order: 0,
+        addedDate: "",
+      }
       state[todolistId].unshift(newTask)
     }),
   }),

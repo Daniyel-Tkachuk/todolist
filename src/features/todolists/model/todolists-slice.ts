@@ -17,8 +17,8 @@ export const todolistsSlice = createAppSlice({
         try {
           const result = await todolistsApi.getTodolists()
           return {todolists: result.data}
-        } catch (error: any) {
-          return rejectWithValue(error.message)
+        } catch (error) {
+          return rejectWithValue(null)
         }
       },
       {
