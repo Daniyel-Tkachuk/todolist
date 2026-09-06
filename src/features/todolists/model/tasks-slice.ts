@@ -1,9 +1,8 @@
-import {nanoid} from "@reduxjs/toolkit"
 import {createTodolistTC, deleteTodolistTC, fetchTodolistsTC} from "./todolists-slice"
 import {createAppSlice} from "@/common/utils"
 import {tasksApi} from "@/features/todolists/api/tasksApi"
 import type {DomainTask} from "@/features/todolists/api/tasksApi.types"
-import {TaskPriority, TaskStatus} from "@/common/enums"
+import {TaskStatus} from "@/common/enums"
 
 export const tasksSlice = createAppSlice({
   name: "tasks",
@@ -51,6 +50,29 @@ export const tasksSlice = createAppSlice({
         },
       },
     ),
+    deleteTaskTC: create.asyncThunk(
+      async (args: {todolistId: string; taskId: string}, {rejectWithValue}) => {
+        try {
+          await tasksApi.deleteTask(args)
+          return args
+        } catch (error) {
+          return rejectWithValue(null)
+        }
+      },
+      {
+        fulfilled: (state, action) => {
+          const {taskId, todolistId} = action.payload
+          const tasks = state[todolistId]
+          const index = tasks.findIndex((t) => t.id === taskId)
+          if (index !== -1) {
+            tasks.splice(index, 1)
+          }
+        },
+        rejected: (_, action: any) => {
+          console.log(action.payload.message)
+        },
+      },
+    ),
     // ✅ actions
     deleteTaskAC: create.reducer<{todolistId: string; taskId: string}>((state, action) => {
       const {taskId, todolistId} = action.payload
@@ -73,22 +95,6 @@ export const tasksSlice = createAppSlice({
       if (task) {
         task.title = title
       }
-    }),
-    createTaskAC: create.reducer<{todolistId: string; title: string}>((state, action) => {
-      const {title, todolistId} = action.payload
-      const newTask: DomainTask = {
-        id: nanoid(),
-        title,
-        status: TaskStatus.New,
-        description: "",
-        priority: TaskPriority.Low,
-        startDate: "",
-        deadline: "",
-        todoListId: "",
-        order: 0,
-        addedDate: "",
-      }
-      state[todolistId].unshift(newTask)
     }),
   }),
   extraReducers: (builder) => {
@@ -113,7 +119,7 @@ export const tasksSlice = createAppSlice({
 })
 
 export const tasksReducer = tasksSlice.reducer
-export const {deleteTaskAC, changeTaskStatusAC, changeTaskTitleAC, createTaskAC, fetchTasksTC} = tasksSlice.actions
+export const {deleteTaskTC, changeTaskStatusAC, changeTaskTitleAC, createTaskTC, fetchTasksTC} = tasksSlice.actions
 export const {selectTasks} = tasksSlice.selectors
 
 export type Task = {
