@@ -2,7 +2,6 @@ import {createTodolistTC, deleteTodolistTC, fetchTodolistsTC} from "./todolists-
 import {createAppSlice} from "@/common/utils"
 import {tasksApi} from "@/features/todolists/api/tasksApi"
 import type {DomainTask, UpdateTaskModel} from "@/features/todolists/api/tasksApi.types"
-import {TaskStatus} from "@/common/enums"
 import type {RootState} from "@/app/store"
 
 export const tasksSlice = createAppSlice({
@@ -75,9 +74,9 @@ export const tasksSlice = createAppSlice({
       },
     ),
     changeTaskStatusTC: create.asyncThunk(
-      async (args: {todolistId: string; taskId: string; status: TaskStatus}, {rejectWithValue, getState}) => {
+      async (args: {todolistId: string; taskId: string; model: UpdateTaskModel}, {rejectWithValue, getState}) => {
         try {
-          const {todolistId, taskId, status} = args
+          const {todolistId, taskId} = args
 
           const allTasks = (getState() as RootState).tasks
           const tasksForTodolist = allTasks[todolistId]
@@ -87,16 +86,7 @@ export const tasksSlice = createAppSlice({
             return rejectWithValue(null)
           }
 
-          const model: UpdateTaskModel = {
-            status,
-            title: task.title,
-            startDate: task.startDate,
-            priority: task.priority,
-            description: task.description,
-            deadline: task.deadline,
-          }
-
-          const res = await tasksApi.updateTask({todolistId, taskId, model})
+          const res = await tasksApi.updateTask(args)
           return {task: res.data.data.item}
         } catch (error) {
           return rejectWithValue(null)
@@ -149,11 +139,5 @@ export const tasksSlice = createAppSlice({
 export const tasksReducer = tasksSlice.reducer
 export const {deleteTaskTC, changeTaskStatusTC, changeTaskTitleAC, createTaskTC, fetchTasksTC} = tasksSlice.actions
 export const {selectTasks} = tasksSlice.selectors
-
-export type Task = {
-  id: string
-  title: string
-  isDone: boolean
-}
 
 export type TasksState = Record<string, DomainTask[]>

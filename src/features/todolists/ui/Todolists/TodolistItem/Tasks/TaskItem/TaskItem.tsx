@@ -1,4 +1,4 @@
-import type {DomainTask} from "@/features/todolists/api/tasksApi.types"
+import type {DomainTask, UpdateTaskModel} from "@/features/todolists/api/tasksApi.types"
 import type {ChangeEvent} from "react"
 import {EditableSpan} from "@/common/components/EditableSpan/EditableSpan"
 import {useAppDispatch} from "@/common/hooks"
@@ -24,7 +24,17 @@ export const TaskItem = ({task, todolistId}: Props) => {
 
   const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {
     const newStatusValue = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New
-    dispatch(changeTaskStatusTC({todolistId, taskId: task.id, status: newStatusValue}))
+
+    const model: UpdateTaskModel = {
+      status: newStatusValue,
+      title: task.title,
+      startDate: task.startDate,
+      priority: task.priority,
+      description: task.description,
+      deadline: task.deadline,
+    }
+
+    dispatch(changeTaskStatusTC({todolistId, taskId: task.id, model}))
   }
 
   const changeTaskTitle = (title: string) => {
