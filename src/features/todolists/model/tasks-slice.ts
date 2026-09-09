@@ -1,4 +1,4 @@
-import {createTodolistTC, deleteTodolistTC, fetchTodolistsTC} from "./todolists-slice"
+import {createTodolistTC, deleteTodolistTC} from "./todolists-slice"
 import {createAppSlice} from "@/common/utils"
 import {tasksApi} from "@/features/todolists/api/tasksApi"
 import type {DomainTask, UpdateTaskModel} from "@/features/todolists/api/tasksApi.types"
@@ -134,16 +134,6 @@ export const tasksSlice = createAppSlice({
   }),
   extraReducers: (builder) => {
     builder
-      .addCase(fetchTodolistsTC.fulfilled, (state, action) => {
-        action.payload.todolists.forEach(({id}) => {
-          if (!state[id]) {
-            state[id] = []
-          }
-        })
-      })
-      .addCase(fetchTodolistsTC.rejected, (_state, action: any) => {
-        console.log(action.payload.message)
-      })
       .addCase(createTodolistTC.fulfilled, (state, action) => {
         state[action.payload.todolist.id] = []
       })
