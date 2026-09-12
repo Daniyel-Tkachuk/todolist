@@ -15,7 +15,7 @@ export const TodolistTitle = ({todolist}: Props) => {
   const dispatch = useAppDispatch()
 
   const deleteTodolist = () => {
-    dispatch(deleteTodolistTC({id}))
+    dispatch(deleteTodolistTC(id))
   }
 
   const changeTodolistTitle = (title: string) => {
